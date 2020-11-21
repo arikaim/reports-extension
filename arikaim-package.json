@@ -1,0 +1,18 @@
+{
+    "title": "Reports",
+    "name": "reports",
+    "package-type": "extension",
+    "type": "system",
+    "description": "Manage reports.",
+    "short-description": "Reports system.",
+    "version": "1.0.0",
+    "repository": "https://github.com/arikaim/reports-extension.git",
+    "position": "2",
+    "admin-menu": {        
+        "title": "Reports",
+        "icon": "chart pie",
+        "page-title": "Reports",
+        "page-icon": "chart pie",       
+        "component": "reports::admin"
+    }
+}

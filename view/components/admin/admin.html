@@ -1,0 +1,10 @@
+{% set items = [ 
+    { id: 'view_button', title: labels.reports, component: 'reports::admin.reports', icon: 'chart bar outline', active: true }
+] %}
+
+{{  component('components:tabs',{ 
+        items: items,
+        menu: { component: 'system:admin.extensions.menu.actions', extension: 'reports' },
+        content: { component: 'reports::admin.reports' } 
+    })
+}}

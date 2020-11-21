@@ -1,0 +1,14 @@
+{% set reports = createModel('Reports','reports') %}
+{% set reports = reports.get() %}
+
+{% if reports|length == 0 %}
+<div class="item">
+    {{ labels.empty }}
+</div>
+{% endif %}
+
+{% for report in reports %}
+    <div class="item">
+        
+    </div>
+{% endfor %}
