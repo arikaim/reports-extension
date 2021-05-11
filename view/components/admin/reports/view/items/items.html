@@ -8,7 +8,28 @@
 {% endif %}
 
 {% for report in reports %}
-    <div class="item">
-        
+    <div class="item">      
+        <div class="content">
+            <i class="icon chart bar outline blue"></i>
+            <a class="view-report cursor-poiner" uuid="{{ report.uuid }}">
+                {{ report.title }}
+            </a>
+            <div class="ui basic label">
+                <span class="ui text blue">
+                    {{ labels.slug }}
+                </span>
+                <span class="pl-2">
+                    {{ report.slug }}
+                </span>                   
+            </div>                       
+            <div class="ui basic label right floated">
+                <span class="ui text blue">
+                    {{ labels.created }}
+                </span>
+                <span class="pl-2">
+                    {{ report.date_created|dateTimeFormat }}
+                </span>    
+            </div>
+        </div>
     </div>
 {% endfor %}

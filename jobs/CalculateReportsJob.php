@@ -12,27 +12,28 @@ namespace Arikaim\Extensions\Reports\Jobs;
 use Arikaim\Core\Queue\Jobs\CronJob;
 use Arikaim\Core\Db\Model;
 use Arikaim\Extensions\Reports\Classes\ReportUpdate;
+use Arikaim\Extensions\Reports\Classes\ReportInterface;
 
-use Arikaim\Core\Interfaces\Job\RecuringJobInterface;
+use Arikaim\Core\Interfaces\Job\RecurringJobInterface;
 use Arikaim\Core\Interfaces\Job\JobInterface;
 
 /**
  * Calculate reports cron job
  */
-class CalculateReportsJob extends CronJob implements RecuringJobInterface, JobInterface
+class CalculateReportsJob extends CronJob implements RecurringJobInterface, JobInterface
 {
     /**
      * Constructor
      *
      * @param string|null $extension
      * @param string|null $name
-     * @param integer $priority
+     * @param array $params
      */
-    public function __construct($extension = null, $name = null, $priority = 0)
+    public function __construct(?string $extension = null, ?string $name = null, array $params = [])
     {
-        parent::__construct($extension,$name,$priority);
+        parent::__construct($extension,$name,$params);
         
-        $this->runEveryHour();
+        $this->runEveryDay();
     }
 
     /**
@@ -42,11 +43,24 @@ class CalculateReportsJob extends CronJob implements RecuringJobInterface, JobIn
      */
     public function execute()
     {
-        $model = Model::Reports('reports');      
-        $reports = $model->waitingUpdateQuery()->get();
+        $fields = Model::ReportFields('reports')->get();      
         
-        $result = ReportUpdate::updateReportsData($reports);
+        foreach ($fields as $field) {
+            $result = $this->calcField($field);            
+        }
 
         return $result;
+    }
+
+    /**
+     * Update report fields
+     *
+     * @param object $field
+     * @return void
+     */
+    public function calcField($field)
+    {
+        // update daily value
+
     }
 }

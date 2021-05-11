@@ -7,31 +7,27 @@
 'use strict';
 
 function ReportsAdmin() {
-    
-  
+   
+    this.add = function(formId, onSuccess, onError) {
+        return arikaim.post('/api/admin/reports/add',formId,onSuccess,onError);         
+    };
 
     this.update = function(formId, onSuccess, onError) {
-        return arikaim.put('/api/users/admin/update',formId,onSuccess,onError);         
+        return arikaim.put('/api/admin/reports/update',formId,onSuccess,onError);         
     };
     
-  
-
     this.setStatus = function(uuid, status, onSuccess, onError) { 
         var data = { 
             status: status,
             uuid: uuid 
         };
         
-        return arikaim.put('/api/users/admin/status',data,onSuccess,onError);           
-    };
-
-    this.init = function() {
-        arikaim.ui.tab('.reports-tab-item','reports_content');
-    };
+        return arikaim.put('/api/admin/reports/status',data,onSuccess,onError);           
+    };    
 }
 
 var reportsAdmin = new ReportsAdmin();
 
-$(document).ready(function() {
-    reportsAdmin.init();
+arikaim.component.onLoaded(function() {
+    arikaim.ui.tab('.reports-tab-item','reports_content');
 });

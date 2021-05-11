@@ -24,12 +24,16 @@ class Reports extends Extension
     public function install()
     {
         // Control Panel
-        $this->addApiRoute('PUT','/api/reports/admin/update','ReportsControlPanel','update','session'); 
-        $this->addApiRoute('PUT','/api/reports/admin/status','ReportsControlPanel','setStatus','session'); 
+        $this->addApiRoute('POST','/api/admin/reports/add','ReportsControlPanel','add','session'); 
+        $this->addApiRoute('PUT','/api/admin/reports/update','ReportsControlPanel','update','session'); 
+        $this->addApiRoute('PUT','/api/admin/reports/status','ReportsControlPanel','setStatus','session'); 
       
         // Create db tables
         $this->createDbTable('ReportsSchema');
         $this->createDbTable('ReportDataSchema');
+        $this->createDbTable('ReportFieldsSchema');
+        // Services
+        $this->registerService('Reports');
     }   
     
     /**

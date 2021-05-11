@@ -10,36 +10,22 @@
 namespace Arikaim\Extensions\Reports\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
-use Arikaim\Core\Utils\DateTime;
+use Arikaim\Extensions\Reports\Classes\ReportInterface;
+use Arikaim\Core\Utils\TimePeriod;
 
 use Arikaim\Core\Db\Traits\Uuid;
 use Arikaim\Core\Db\Traits\Find;
-use Arikaim\Core\Db\Traits\Slug;
-use Arikaim\Core\Db\Traits\UserRelation;
+use Arikaim\Core\Db\Traits\DateCreated;
 
 /**
  * ReportData class
  */
 class ReportData extends Model  
 {
-    const TYPE_SUMMARY         = 0;
-    const TYPE_SUMMARY_DAILY   = 1;
-    const TYPE_SUMMARY_WEEKLY  = 2;
-    const TYPE_SUMMARY_MONTHLY = 3;
-
-    const DATA_TYPE = [
-        'summary',
-        'summary_daily',
-        'summary_weekly',
-        'summary_monthly'
-    ];
-
     use Uuid,
-        Find,
-        UserRelation,
-        Slug;      
-     
+        DateCreated,
+        Find;
+         
     /**
      * Table name
      *
@@ -55,12 +41,8 @@ class ReportData extends Model
     protected $fillable = [
         'uuid',       
         'report_id',
-        'field_value',
-        'field_name',
-        'history_index',
-        'user_id',       
-        'date_created',
-        'date_updated'
+        'value',    
+        'date_created'
     ];
    
     /**
@@ -70,29 +52,61 @@ class ReportData extends Model
      */
     public $timestamps = false;
     
-
-    public function getReportValue($reportId, $userId, $fieldName, $index = 1)
+    /**
+     * Add report value
+     *
+     * @param integer $reportId
+     * @param mixed $value
+     * @return boolean
+     */
+    public function addValue(int $reportId, $value): bool
     {
+        $model = $this->create([            
+            'report_id' => $reportId,
+            'value'     => $value
+        ]);
 
+        return \is_object($model);
     } 
 
-    public function findReportValue($reportId, $userId, $fieldName, $index = 1)
+    /**
+     * Data scope per period
+     *
+     * @param Builder $query
+     * @param integer $reportId
+     * @param string $periodType
+     * @param integer|null $day
+     * @param integer|null $month
+     * @param integer|null $year
+     * @return Builder
+     */
+    public function scopeDataQuery(
+        $query,
+        int $reportId, 
+        string $periodType, 
+        ?int $day = null, 
+        ?int $month = null, 
+        ?int $year = null
+    )
     {
-
-    } 
-
-    public function saveReportValue($reportId, $reportType, $userId, $fieldName, $fieldValue)
-    {
-        $currentTime = DateTime::getTimestamp();
+        switch ($periodType) {
+            case ReportInterface::CALC_PERIOD_DAILY:      
+                $period = TimePeriod::getDayPeriod($day,$month,$year);     
+                break;
         
-        switch($reportType) {
-            case Self::TYPE_SUMMARY:
-            break;
-            
-            case Self::TYPE_SUMMARY_DAILY: 
-            break;
+            case ReportInterface::CALC_PERIOD_MONTHLY:     
+                $period = TimePeriod::getMonthPeriod($month,$year);       
+                break;
+    
+            case ReportInterface::CALC_PERIOD_YEARLY:   
+                $period = TimePeriod::getYearPeriod($month,$year);       
+                break;           
         }
 
+        return $query
+                    ->where('report_id','=',$reportId)
+                    ->where('date_created','=>',$period['start'])
+                    ->where('date_created','<=',$period['end']);
+    } 
 
-    }
 }

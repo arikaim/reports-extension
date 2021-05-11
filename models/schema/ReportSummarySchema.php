@@ -12,16 +12,16 @@ namespace Arikaim\Extensions\Reports\Models\Schema;
 use Arikaim\Core\Db\Schema;
 
 /**
- * Reports db table
+ * Report summary values db table
  */
-class ReportsSchema extends Schema  
+class ReportSummarySchema extends Schema  
 {    
     /**
      * Table name
      *
      * @var string
      */
-    protected $tableName = 'reports';
+    protected $tableName = 'report_summary';
 
     /**
      * Create table
@@ -33,19 +33,17 @@ class ReportsSchema extends Schema
     {            
         // columns    
         $table->id();
-        $table->prototype('uuid');   
-        $table->status();    
-        $table->userid();    
-        $table->string('title')->nullable(false);
-        $table->slug(false);
-        $table->integer('editable')->nullable(true); 
-        $table->string('category')->nullable(true);   
-        $table->string('extension_name')->nullable(true);
+        $table->prototype('uuid'); 
+        $table->relation('field_id','report_fields');       
+        $table->string('period')->nullable(false);
+        $table->integer('day')->nullable(true);
+        $table->integer('month')->nullable(true);
+        $table->integer('year')->nullable(true);
+        $table->decimal('value',15,4)->nullable(true)->default(0.00);     
         $table->dateCreated();
-        $table->dateUpdated();         
-        // index
-        $table->index('extension_name');
-        $table->unique(['slug','user_id']);
+        $table->dateUpdated();
+        // index 
+        $table->unique(['field_id','period','day','month','year']);           
     }
 
     /**

@@ -39,14 +39,14 @@ class ReportsControlPanel extends ControlPanelApiController
     {    
         $this->onDataValid(function($data) {
             $uuid = $data->get('uuid');
-            $model = Model::Category('category')->findByid($uuid); 
+           // $model = Model::Category('category')->findByid($uuid); 
            
             $result = false;
-            $this->setResponse($result,function() use($model) {
-                $this->get('event')->dispatch('category.update',['uuid' => $model->uuid]);   
+            $this->setResponse($result,function()  {
+               // $this->get('event')->dispatch('category.update',['uuid' => $model->uuid]);   
                 $this
-                    ->message('update')
-                    ->field('uuid',$model->uuid);   
+                    ->message('update');
+                   // ->field('uuid',$model->uuid);   
             },'errors.update');
         });
         $data      

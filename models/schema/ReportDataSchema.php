@@ -14,7 +14,7 @@ use Arikaim\Core\Db\Schema;
 /**
  * Report data db table
  */
-class ReportsDataSchema extends Schema  
+class ReportDataSchema extends Schema  
 {    
     /**
      * Table name
@@ -34,16 +34,10 @@ class ReportsDataSchema extends Schema
         // columns    
         $table->id();
         $table->prototype('uuid'); 
-        $table->userId();  
         $table->relation('report_id','reports');
-        $table->string('field_name')->nullable(false);
-        $table->price(0,'field_value');
-        $table->integer('history_index')->nullable(false)->default(1);       
+        $table->decimal('value',15,4)->nullable(false);     
         $table->dateCreated();
-        $table->dateUpdated();
-
-        // index     
-        $table->unique(['user_id','report_id','field_name']); 
+        // index            
     }
 
     /**

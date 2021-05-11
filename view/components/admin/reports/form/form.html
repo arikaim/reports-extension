@@ -1,0 +1,16 @@
+{% if uuid is not empty %}
+    {% set workflow = createModel('Workflows','actions').findById(uuid) %} 
+{% endif %}
+
+<form class="ui equal width form" id="city_form">  
+    <input type="hidden" name="uuid" id="uuid" value="{{ uuid }}">    
+    <div class="field required">
+        <label>{{ fields.title.label }}</label>
+        <input type="text" name="title" id="title" {{ fields.title.placeholder|attr('placeholder') }} value="{{ workflow.title }}">  
+    </div> 
+    <div class="field">
+        <label>{{ fields.note.label }}</label>
+        <textarea name="note" id="note" rows="7" cols="7">{{ workflow.note }}</textarea>
+    </div>                        
+    {{ component('components:form.footer') }}   
+</form>

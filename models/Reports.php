@@ -11,11 +11,12 @@ namespace Arikaim\Extensions\Reports\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Arikaim\Extensions\Reports\Models\ReportData;
+use Arikaim\Extensions\Reports\Models\ReportSummary;
 
 use Arikaim\Core\Db\Traits\Uuid;
 use Arikaim\Core\Db\Traits\Find;
-use Arikaim\Core\Db\Traits\Slug;
 use Arikaim\Core\Db\Traits\Status;
+use Arikaim\Core\Db\Traits\DateCreated;
 
 /**
  * Reports class
@@ -24,7 +25,7 @@ class Reports extends Model
 {
     use Uuid,
         Find,
-        Slug,
+        DateCreated,
         Status;
      
     /**
@@ -44,11 +45,9 @@ class Reports extends Model
         'status',
         'title',
         'slug',
+        'category',
+        'editable',
         'extension_name',
-        'update_interval',
-        'event_name',
-        'data_source',
-        'data_type',
         'date_created',
         'date_updated'
     ];
@@ -70,58 +69,79 @@ class Reports extends Model
         return $this->hasMany(ReportData::class,'report_id');
     }
 
-    public function saveReportData($data, $reportId = null)
+    /**
+     * Report summary fields relation
+     *
+     * @return Relation
+     */
+    public function summary()
     {
-        $model = (empty($reportId) == true) ? $this : $this->findById($reportId);
-        $reportData = new ReportData();
-
-       
-    } 
+        return $this->hasMany(ReportSummary::class,'report_id');
+    }
 
     /**
-     * Get pending update reports
+     * Report scope
      *
      * @param Builder $query
+     * @param string $slug
+     * @param integer|null $userId
      * @return Builder
      */
-    public function scopeWaitingUpdateQuery($query)
+    public function scopeReport($query, string $slug, ?int $userId = null)
     {
-        $query = $query->where('status','=',1)->whereNotNull('update_interval');
+        $query = $query->where('slug','=',$slug);
+        if (empty($userId) == false) {
+            $query = $query->where('user_id','=',$userId);
+        }
 
         return $query;
     }
 
     /**
-     * Get update by event reprts
+     * Get report model
      *
-     * @param Builder $query
-     * @return Builder
+     * @param string $slug
+     * @param integer|null $userId
+     * @return Model|null
      */
-    public function scopeSubscribedQuery($query, $eventName)
+    public function findReport(string $slug, ?int $userId = null)
     {
-        return $query->where('status','=',1)->where('event_name','=',$eventName);
+        $query = $this->report($slug,$userId);
+        
+        return $query->first();
+    } 
+
+    /**
+     * Return true if report exist
+     *
+     * @param string $slug
+     * @param integer|null $userId
+     * @return boolean
+     */
+    public function hasReport(string $slug, ?int $userId = null): bool
+    {
+        return \is_object($this->findReport($slug,$userId));
     }
 
     /**
      * Save report
      *
-     * @param string $title
-     * @param int $type
-     * @param string $dataSource
-     * @param string|null $extension
-     * @return Model|bool
+     * @param string $slug
+     * @param array $data
+     * @param integer|null $userId
+     * @return Model|null
      */
-    public function saveReport($title, $type, $dataSource, $updateInterval = null, $extension = null)
+    public function saveReport(string $slug, array $data, ?int $userId = null)
     {
-        $report = $this->findBySlug($title);
-        $data = [
-            'title'           => $title,
-            'type'            => $type,
-            'data_source'     => $dataSource,
-            'update_interval' => $updateInterval,
-            'extension_name'  => $extension
-        ];
+        $model = $this->findReport($slug,$userId);
+        $data['user_id'] = $userId;
+        $data['slug'] = $slug;
+
+        if (\is_object($model) == true) {
+            $model->update($data);
+            return $model;
+        }
         
-        return (\is_object($report) == true) ? $report->update($data) : $report->create($data);      
+        return $this->create($data);      
     }
 }

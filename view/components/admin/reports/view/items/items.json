@@ -1,5 +1,7 @@
 {
     "labels": {
-        "empty": ".."
+        "empty": "..",
+        "slug": "Slug",
+        "created": "Created"
     }
 }

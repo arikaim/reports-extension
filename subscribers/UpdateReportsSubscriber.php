@@ -17,7 +17,7 @@ use Arikaim\Core\Interfaces\Events\EventSubscriberInterface;
 /**
  * Update reports data values
 */
-class DashboardSubscriber extends EventSubscriber implements EventSubscriberInterface
+class UpdateReportsSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     /**
      * Constructor
@@ -35,11 +35,11 @@ class DashboardSubscriber extends EventSubscriber implements EventSubscriberInte
      */
     public function execute($event)
     {
-        $model = Model::Reports('reports');      
-        $reports = $model->subscribedQuery()->get();
+      //  $model = Model::Reports('reports');      
+     //   $reports = $model->subscribedQuery()->get();
         
-        $result = ReportUpdate::updateReportsData($reports);
+     //   $result = ReportUpdate::updateReportsData($reports);
 
-        return $result;
+        return true;
     }
 }

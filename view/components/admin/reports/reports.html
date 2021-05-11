@@ -1,6 +1,6 @@
 {% set items = [ 
-    { title: labels.view,component: 'reports::admin.reports.view',icon: 'list', active: true },
-    { id: 'edit_report',title: labels.edit,component: 'reports::admin.reports.edit',icon: 'edit' }    
+    { title: labels.list, component: 'reports::admin.reports.view', icon: 'list', active: true },
+    { id: 'view_report_tab', title: labels.view, component: 'reports::admin.reports.details', icon: 'eye' }
 ] %}
 
 {{  component('components:tabs.vertical',{ 
