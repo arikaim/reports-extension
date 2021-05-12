@@ -1,0 +1,10 @@
+{   
+    "labels": {
+        "title": "Title",
+        "slug": "Slug",
+        "details": "Details",
+        "description": "Description",
+        "fields": "Fields",
+        "date": "Date Created"
+    }
+}

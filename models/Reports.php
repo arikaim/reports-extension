@@ -11,7 +11,7 @@ namespace Arikaim\Extensions\Reports\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Arikaim\Extensions\Reports\Models\ReportData;
-use Arikaim\Extensions\Reports\Models\ReportSummary;
+use Arikaim\Extensions\Reports\Models\ReportFields;
 
 use Arikaim\Core\Db\Traits\Uuid;
 use Arikaim\Core\Db\Traits\Find;
@@ -44,9 +44,11 @@ class Reports extends Model
         'uuid',       
         'status',
         'title',
+        'description',
         'slug',
         'category',
         'editable',
+        'data_source',
         'extension_name',
         'date_created',
         'date_updated'
@@ -74,9 +76,21 @@ class Reports extends Model
      *
      * @return Relation
      */
-    public function summary()
+    public function fields()
     {
-        return $this->hasMany(ReportSummary::class,'report_id');
+        return $this->hasMany(ReportFields::class,'report_id');
+    }
+
+    /**
+     * Get report data source instance
+     *
+     * @return object
+     */
+    public function getDataSource()
+    {
+        $dataSurceClass = (empty($this->data_source) == true) ? ReportData::class : $this->data_source;
+       
+        return new $dataSurceClass();
     }
 
     /**

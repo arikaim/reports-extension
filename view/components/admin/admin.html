@@ -1,5 +1,6 @@
 {% set items = [ 
-    { id: 'list_button', title: labels.reports, component: 'reports::admin.reports', icon: 'chart bar outline', active: true }
+    { id: 'list_button', title: labels.reports, component: 'reports::admin.reports', icon: 'chart bar outline', active: true },
+    { title: labels.settings, component: 'reports::admin.settings', icon: 'cogs' }
 ] %}
 
 {{  component('components:tabs',{ 

@@ -1,0 +1,19 @@
+
+{% set data = createModel('ReportData','reports').reportDataQuery(report_id) %}
+<h4>{{ title|default(labels.data) }}</h4>
+<table class="ui compact stackable selectable borderless basic definition mini table">
+    <thead>
+        <tr>              
+            <th class="one wide collapsing left aligned">{{ columns.date }}</th>
+            <th class="one wide">{{ columns.value }}</th>                                                                            
+        </tr>
+    </thead>
+    <tbody id="share_rows" component="reports::admin.reports.details.data" namespace="reports">
+        {% for item in data.get() %}
+        <tr>
+            <td>{{ item.date_created|dateTimeFormat }}</td>
+            <td>{{ item.value }}</td>
+        </tr>        
+        {% endfor %}
+    </tbody>
+</table>

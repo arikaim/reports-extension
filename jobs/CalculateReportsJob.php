@@ -14,6 +14,8 @@ use Arikaim\Core\Db\Model;
 use Arikaim\Extensions\Reports\Classes\ReportUpdate;
 use Arikaim\Extensions\Reports\Classes\ReportInterface;
 
+
+use Arikaim\Core\Utils\TimePeriod;
 use Arikaim\Core\Interfaces\Job\RecurringJobInterface;
 use Arikaim\Core\Interfaces\Job\JobInterface;
 
@@ -43,24 +45,14 @@ class CalculateReportsJob extends CronJob implements RecurringJobInterface, JobI
      */
     public function execute()
     {
-        $fields = Model::ReportFields('reports')->get();      
-        
-        foreach ($fields as $field) {
-            $result = $this->calcField($field);            
+        $reports = Model::Reports('reports')->activeQuery()->get();
+       
+        $errors = 0;
+        foreach ($reports as $report) {
+            $result = ReportUpdate::updateReport($report);
+            $errors += ($result == false) ? 1 : 0;              
         }
 
-        return $result;
-    }
-
-    /**
-     * Update report fields
-     *
-     * @param object $field
-     * @return void
-     */
-    public function calcField($field)
-    {
-        // update daily value
-
+        return ($errors == 0);
     }
 }

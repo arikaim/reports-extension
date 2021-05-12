@@ -12,6 +12,7 @@ namespace Arikaim\Extensions\Reports\Models;
 use Illuminate\Database\Eloquent\Model;
 use Arikaim\Extensions\Reports\Classes\ReportInterface;
 use Arikaim\Core\Utils\TimePeriod;
+use Arikaim\Core\Utils\DateTime;
 
 use Arikaim\Core\Db\Traits\Uuid;
 use Arikaim\Core\Db\Traits\Find;
@@ -70,6 +71,18 @@ class ReportData extends Model
     } 
 
     /**
+     * Report data scope query
+     *
+     * @param Builder $query
+     * @param integer $reportId
+     * @return Builder
+     */
+    public function scopeReportDataQuery($query, int $reportId)
+    {
+        return $query->where('report_id','=',$reportId);
+    }
+
+    /**
      * Data scope per period
      *
      * @param Builder $query
@@ -105,8 +118,24 @@ class ReportData extends Model
 
         return $query
                     ->where('report_id','=',$reportId)
-                    ->where('date_created','=>',$period['start'])
+                    ->where('date_created','>=',$period['start'])
                     ->where('date_created','<=',$period['end']);
     } 
 
+    /**
+     * Get report data
+     *
+     * @param array $filter
+     * @param string $period
+     * @param integer|null $day
+     * @param integer|null $month
+     * @param integer|null $year
+     * @return array
+     */
+    public function getReportData(array $filter, string $period, ?int $day = null, ?int $month = null, ?int $year = null): array
+    {
+        $reportId = $filter['report_id'] ?? $this->report_id;
+
+        return $this->dataQuery($reportId,$period,$day,$month,$year)->get()->toArray();
+    }
 }

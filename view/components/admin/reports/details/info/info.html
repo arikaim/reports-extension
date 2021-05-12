@@ -1,0 +1,34 @@
+{% set report = createModel('Reports','reports').findById(report_id) %}
+<div>
+    <h4>{{ title|default(labels.details) }}</h4>
+    <table class="ui mini table definition very basic">
+        <tbody>
+            <tr>
+                <td class="right aligned two wide">{{ labels.title }}</td>
+                <td>{{ report.title }}</td>
+            </tr>
+            <tr>
+                <td class="right aligned two wide">{{ labels.slug }}</td>
+                <td>{{ report.slug }}</td>
+            </tr>
+            <tr>
+                <td class="right aligned two wide">{{ labels.date }}</td>
+                <td>{{ report.date_created|dateTimeFormat }}</td>
+            </tr>
+            {% if report.description is not empty %}
+            <tr>
+                <td class="right aligned two wide">{{ labels.description }}</td>
+                <td>
+                    {{ report.description }}
+                </td>
+            </tr>
+            {% endif %}
+            <tr>
+                <td class="right aligned two wide">{{ labels.fields }}</td>
+                <td>
+                    
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

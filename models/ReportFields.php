@@ -10,6 +10,7 @@
 namespace Arikaim\Extensions\Reports\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Arikaim\Extensions\Reports\Models\ReportSummary;
 
 use Arikaim\Core\Db\Traits\Uuid;
 use Arikaim\Core\Db\Traits\Find;
@@ -54,6 +55,77 @@ class ReportFields extends Model
      * @var boolean
      */
     public $timestamps = false;
+
+    /**
+     * Report summary values relation
+     *
+     * @return Relation
+    */
+    public function summary()
+    {
+        return $this->hasMany(ReportSummary::class,'field_id');
+    }
+
+    /**
+     * Get summary data query
+     *
+     * @param string $period
+     * @param integer|null $day
+     * @param integer|null $month
+     * @param integer|null $year
+     * @return Builder
+     */
+    public function getSummaryQuery(string $period, ?int $day = null, ?int $month = null, ?int $year = null)
+    {
+        return $this->summary()->where(function ($query) use($period,$day,$month,$year) {
+            $query = $query->where('period','=',$period);
+
+            if (empty($day) == false) {
+                $query = $query->where('day','=',$day);
+            }
+            if (empty($month) == false) {
+                $query = $query->where('month','=',$month);
+            }
+            if (empty($year) == false) {
+                $query = $query->where('year','=',$year);      
+            }     
+
+            return $query;
+        });
+    }
+
+    /**
+     * Save summary value
+     *
+     * @param mixed $value
+     * @param string $period
+     * @param integer $day
+     * @param integer $month
+     * @param integer $year
+     * @return boolean
+     */
+    public function saveSummaryValue($value, string $period, ?int $day, ?int $month, ?int $year): bool
+    {
+        $model = $this->getSummaryQuery($period,$day,$month,$year)->first();
+
+        $info = [
+            'field_id' => $this->id,
+            'value'    => $value,
+            'period'   => $period,
+            'day'      => $day,
+            'month'    => $month,
+            'year'     => $year
+        ];
+
+        if (\is_object($model) == false) {
+            $model = new ReportSummary();       
+            $created = $model->create($info);
+
+            return \is_object($created);
+        } 
+        
+        return (bool)$model->update($info);       
+    }
 
     /**
      * Scope summary field

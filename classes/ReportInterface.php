@@ -23,7 +23,8 @@ interface ReportInterface
     const CALC_PERIOD_WEEKLY  = 'weekly';
     const CALC_PERIOD_MONTHLY = 'monthly';
     const CALC_PERIOD_YEARLY  = 'yearly';
-   
+    const CALC_PERIOD_ALL     = 'all';
+
     /**
      * Get calculated report value
      *

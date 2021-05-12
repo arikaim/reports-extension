@@ -1,0 +1,25 @@
+{% set reports = createModel('Reports','reports') %}
+{% if selected is not empty %}
+    {% set item_selected = reports.findById(selected) %}
+{% endif %}
+{% set items = reports.get() %}
+{% set data_field = data_field|default('uuid') %}
+
+<div class="ui dropdown reports-dropdown {{ class }}" 
+    {{ title|attr('title') }} 
+    data-field="{{ data_field }}"
+    id="{{ id|default('reports_dropdown') }}">  
+    <i class="icon {{ icon|default('chart bar outline blue') }}"></i>  
+    <input {{ rule|attr('rule') }} name="{{ name|default('report') }}" type="hidden" value="{{ item_selected[data_field] }}">  
+    <div class="text">
+        {{ item_selected.name|default(labels.select) }}
+    </div>  
+    <i class="icon dropdown"></i> 
+    <div class="menu">        
+        {% for item in items %}
+        <div class="item" data-value="{{ item[data_field] }}">  
+            {{ item.title }}
+        </div>   
+        {% endfor %}          
+    </div>
+</div>

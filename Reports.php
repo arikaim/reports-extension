@@ -32,8 +32,11 @@ class Reports extends Extension
         $this->createDbTable('ReportsSchema');
         $this->createDbTable('ReportDataSchema');
         $this->createDbTable('ReportFieldsSchema');
+        $this->createDbTable('ReportSummarySchema');
         // Services
         $this->registerService('Reports');
+        // Jobs
+        $this->addJob('CalculateReportsJob','calculateReports',true);
     }   
     
     /**

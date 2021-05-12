@@ -1,0 +1,9 @@
+{
+    "columns": {
+        "date": "Date",
+        "value": "Value"
+    },
+    "labels": {
+        "data": "Data"
+    }
+}
