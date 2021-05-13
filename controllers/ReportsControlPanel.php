@@ -42,7 +42,7 @@ class ReportsControlPanel extends ControlPanelApiController
            // $model = Model::Category('category')->findByid($uuid); 
            
             $result = false;
-            $this->setResponse($result,function()  {
+            $this->setResponse($result,function() {
                // $this->get('event')->dispatch('category.update',['uuid' => $model->uuid]);   
                 $this
                     ->message('update');

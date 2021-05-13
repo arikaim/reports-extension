@@ -10,6 +10,12 @@ arikaim.component.onLoaded(function() {
             }); 
 
             arikaim.page.loadContent({
+                id: 'report_data',
+                component: 'reports::admin.reports.details.summary',
+                params: { report_id: value }
+            }); 
+
+            arikaim.page.loadContent({
                 id: 'report_info',
                 component: 'reports::admin.reports.details.info',
                 params: { report_id: value }
@@ -17,7 +23,7 @@ arikaim.component.onLoaded(function() {
 
             arikaim.page.loadContent({
                 id: 'report_chart',
-                component: 'reports::admin.reports.chart',
+                component: 'reports::chart',
                 params: { report_id: value }
             }); 
         }

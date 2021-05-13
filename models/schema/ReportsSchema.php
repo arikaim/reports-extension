@@ -39,6 +39,7 @@ class ReportsSchema extends Schema
         $table->string('title')->nullable(false);
         $table->slug(false);
         $table->integer('editable')->nullable(true); 
+        $table->integer('public')->nullable(true); 
         $table->string('category')->nullable(true);   
         $table->string('extension_name')->nullable(true);
         $table->string('data_source')->nullable(true);     

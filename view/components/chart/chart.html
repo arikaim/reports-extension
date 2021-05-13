@@ -1,0 +1,38 @@
+{% if report_id is not empty %}
+    {% set report = createModel('Reports','reports').findById(report_id) %}
+{% endif %}
+{% set canvas_id = canvas_id|default('chart_canvas') %}
+{% set year = year|date('Y') %}
+{% set month = month|date('n') %}
+{% set period = period|default('daily') %}
+<chart 
+    class="block report-chart {{ class }}" 
+    report-slug="{{ report.slug }}"
+    period="{{ period }}"
+    type="{{ type|default('line') }}"
+    month="{{ month }}"
+    year="{{ year }}"
+    canvas-id="{{ canvas_id }}">
+    {% if hide_title != true %}
+    <h4>{{ title|default(labels.chart) }}</h4>
+    {% endif %}
+    <div class="p-1">
+        <div class="flex w-full flex-row items-end">
+            <div class="flex-grow">
+            </div>
+            <div class="self-end px-2">
+                <span class="font-bold">{{ labels.type }}</span> 
+                {{ period }}
+            </div>
+            <div class="self-end px-2">
+                <span class="font-bold">{{ labels.month }}</span> 
+                {{ month }}
+            </div>
+            <div class="self-end px-2">
+                <span class="font-bold">{{ labels.year }}</span> 
+                {{ year }}
+            </div>           
+        </div>
+        <canvas id="{{ canvas_id }}"></canvas>
+    </div>
+</chart>

@@ -9,11 +9,8 @@
 */
 namespace Arikaim\Extensions\Reports\Classes;
 
-use Arikaim\Core\Utils\Factory;
 use Arikaim\Core\Db\Model;
-
 use Arikaim\Extensions\Reports\Classes\ReportInterface;
-use Arikaim\Core\Utils\TimePeriod;
 
 /**
  * Calculate report cron job
@@ -24,9 +21,12 @@ class ReportUpdate
      * Update report data
      *
      * @param object|string|int $report
+     * @param integer|null $day
+     * @param integer|null $month
+     * @param integer|null $year
      * @return bool
      */
-    public static function updateReport($report): bool
+    public static function updateReport($report, ?int $day = null, ?int $month = null, ?int $year = null): bool
     {
         if (\is_object($report) == false) {
             $report = Model::Reports('reports')->findReport($report);
@@ -37,36 +37,50 @@ class ReportUpdate
         }
 
         $errors = 0;
+        $dataSource = $report->getDataSource();
         foreach ($report->fields()->get() as $field) {         
-            $result = Self::updateFieldSummary($field,$report);
+            $result = Self::updateFieldSummary($field,$dataSource,$day,$month,$year);
             $errors += ($result == true) ? 0 : 1;
         }
 
         return ($errors == 0);
     }
 
-    public static function updateFieldSummary($field, $report): bool
-    {
-        $dataSource = $report->getDataSource();
+    /**
+     * Undocumented function
+     *
+     * @param object $field
+     * @param object $dataSource
+     * @param integer|null $day
+     * @param integer|null $month
+     * @param integer|null $year
+     * @return boolean
+     */
+    public static function updateFieldSummary($field, $dataSource, ?int $day = null, ?int $month = null, ?int $year = null): bool
+    {        
+        $day = $day ?? date('d');
+        $month = $month ?? date('n');
+        $year = $year ?? date('Y');
+        $dataColumn = $dataSource->getDataColumnName();
 
         // daily summary      
-        $data = $dataSource->getReportData(['report_id' => $field->report_id],'daily',date('d'));
-        $summary = Self::calcSummaryValue($data,$field->type);      
-        $field->saveSummaryValue($summary,'daily',date('d'),date('m'),date('Y'));  
+        $data = $dataSource->getReportData(['report_id' => $field->report_id],'daily',$day);
+        $summary = Self::calcSummaryValue($data,$field,$dataColumn);      
+        $field->saveSummaryValue($summary,'daily',$day,$month,$year);  
     
         // monthly summary    
-        $data = $field->getSummaryQuery('daily',null,date('m'),date('Y'))->get();
-        $summary = Self::calcSummaryValue($data->toArray(),$field->type);     
-        $field->saveSummaryValue($summary,'monthly',null,date('m'),date('Y'));   
+        $data = $field->getSummaryQuery('daily',null,$month,$year)->get();
+        $summary = Self::calcSummaryValue($data->toArray(),$field,$dataColumn);     
+        $field->saveSummaryValue($summary,'monthly',null,$month,$year);   
 
         // yearly summary    
-        $data = $field->getSummaryQuery('monthly',null,null,date('Y'))->get();
-        $summary = Self::calcSummaryValue($data->toArray(),$field->type);     
-        $field->saveSummaryValue($summary,'yearly',null,null,date('Y'));   
+        $data = $field->getSummaryQuery('monthly',null,null,$year)->get();
+        $summary = Self::calcSummaryValue($data->toArray(),$field,$dataColumn);     
+        $field->saveSummaryValue($summary,'yearly',null,null,$year);   
 
         // all summary    
-        $data = $field->getSummaryQuery('yearly',null,null,date('Y'))->get();
-        $summary = Self::calcSummaryValue($data->toArray(),$field->type);     
+        $data = $field->getSummaryQuery('yearly',null,null,$year)->get();
+        $summary = Self::calcSummaryValue($data->toArray(),$field,$dataColumn);     
         $field->saveSummaryValue($summary,'all',null,null,null);   
 
         return true;
@@ -76,23 +90,17 @@ class ReportUpdate
      * Calc report summary value
      *
      * @param array $items
-     * @param string $type
+     * @param object $field
+     * @param string $dataColumn
      * @return mixed
      */
-    public static function calcSummaryValue(array $items, string $type)
+    public static function calcSummaryValue(array $items, $field, string $dataColumn)
     {
-        $summary = 0;
-        foreach($items as $item) {
-
-            switch ($type) {
-                case ReportInterface::CALC_TYPE_COUNT:
-                    $summary = $summary + $item['value'];
-                    break;
-                case ReportInterface::CALC_TYPE_SUM:
-                    $summary = $summary + $item['value'];
-                    break;               
-            }
-
+        $values = \array_column($items,$dataColumn);
+        $summary = \array_sum($values);
+       
+        if ($field->type == ReportInterface::CALC_TYPE_AVG) {
+            $summary = ($summary / \count($values));
         }
 
         return $summary;

@@ -1,5 +1,6 @@
 
-{% set data = createModel('ReportData','reports').reportDataQuery(report_id) %}
+{% set report = createModel('Reports','reports').findById(report_id) %}
+{% set data = report.fields().summary() %}
 <h4>{{ title|default(labels.data) }}</h4>
 <table class="ui compact stackable selectable borderless basic definition mini table">
     <thead>
@@ -8,8 +9,8 @@
             <th class="one wide">{{ columns.value }}</th>                                                                            
         </tr>
     </thead>
-    <tbody id="share_rows" component="reports::admin.reports.details.data" namespace="reports.raw">
-        {% set items = paginate(data,'reports.raw') %}
+    <tbody id="share_rows" component="reports::admin.reports.details.data" namespace="reports.summary">
+        {% set items = paginate(data,'reports.summary') %}
         {% for item in items.getItems() %}
         <tr>
             <td>{{ item.date_created|dateTimeFormat }}</td>

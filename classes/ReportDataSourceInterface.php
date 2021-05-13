@@ -15,6 +15,13 @@ namespace Arikaim\Extensions\Reports\Classes;
 interface ReportDataSourceInterface 
 {  
     /**
+     * Data column name
+     *
+     * @return string
+     */
+    public function getDataColumnName(): string;
+
+    /**
      * Get report data
      *
      * @param array $filter

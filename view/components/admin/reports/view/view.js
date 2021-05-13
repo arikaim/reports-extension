@@ -15,9 +15,14 @@ function ReportsListView() {
     this.initRows = function() {
         arikaim.ui.button('.view-report',function(element) {
             var uuid = $(element).attr('uuid');
-           
-            
             arikaim.ui.setActiveTab('#view_report_tab','.reports-tab-item');
+            
+            arikaim.page.loadContent({
+                id: 'reports_content',
+                component: 'reports::admin.reports.details',
+                params: { uuid: uuid }
+            }); 
+
         }); 
     };
 };

@@ -44,6 +44,7 @@ class Reports extends Model
         'uuid',       
         'status',
         'title',
+        'public',
         'description',
         'slug',
         'category',
@@ -79,6 +80,25 @@ class Reports extends Model
     public function fields()
     {
         return $this->hasMany(ReportFields::class,'report_id');
+    }
+
+    /**
+     * Get summary data
+     *
+     * @param string $fieldType
+     * @param string $period
+     * @param integer|null $month
+     * @param integer|null $year
+     * @return array
+     */
+    public function getSummaryData(string $fieldType, string $period, ?int $month = null, ?int $year = null): array
+    {
+        $model = $this->fields()->where('type','=',$fieldType)->first();
+        if (\is_object($model) == false) {
+            return [];
+        }
+
+        return $model->getSummary($period,null,$month,$year);
     }
 
     /**

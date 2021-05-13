@@ -10,9 +10,10 @@
 namespace Arikaim\Extensions\Reports\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
 use Arikaim\Extensions\Reports\Classes\ReportInterface;
+use Arikaim\Extensions\Reports\Classes\ReportDataSourceInterface;
 use Arikaim\Core\Utils\TimePeriod;
-use Arikaim\Core\Utils\DateTime;
 
 use Arikaim\Core\Db\Traits\Uuid;
 use Arikaim\Core\Db\Traits\Find;
@@ -21,7 +22,7 @@ use Arikaim\Core\Db\Traits\DateCreated;
 /**
  * ReportData class
  */
-class ReportData extends Model  
+class ReportData extends Model implements ReportDataSourceInterface
 {
     use Uuid,
         DateCreated,
@@ -137,5 +138,15 @@ class ReportData extends Model
         $reportId = $filter['report_id'] ?? $this->report_id;
 
         return $this->dataQuery($reportId,$period,$day,$month,$year)->get()->toArray();
+    }
+
+    /**
+     * Data column name
+     *
+     * @return string
+     */
+    public function getDataColumnName(): string
+    {
+        return 'value';
     }
 }

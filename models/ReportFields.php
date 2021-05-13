@@ -95,6 +95,22 @@ class ReportFields extends Model
     }
 
     /**
+     * Get summary data
+     *
+     * @param string $period
+     * @param integer|null $day
+     * @param integer|null $month
+     * @param integer|null $year
+     * @return array
+     */
+    public function getSummary(string $period, ?int $day = null, ?int $month = null, ?int $year = null): array 
+    {
+        $query = $this->getSummaryQuery($period,$day,$month,$year);
+        
+        return $query->get()->toArray();
+    }
+
+    /**
      * Save summary value
      *
      * @param mixed $value

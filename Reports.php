@@ -27,7 +27,9 @@ class Reports extends Extension
         $this->addApiRoute('POST','/api/admin/reports/add','ReportsControlPanel','add','session'); 
         $this->addApiRoute('PUT','/api/admin/reports/update','ReportsControlPanel','update','session'); 
         $this->addApiRoute('PUT','/api/admin/reports/status','ReportsControlPanel','setStatus','session'); 
-      
+        // Api
+        $this->addApiRoute('PUT','/api/reports/chart','ReportsApi','readChart','session'); 
+
         // Create db tables
         $this->createDbTable('ReportsSchema');
         $this->createDbTable('ReportDataSchema');
