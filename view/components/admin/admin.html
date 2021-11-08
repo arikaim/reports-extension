@@ -3,7 +3,7 @@
     { title: labels.settings, component: 'reports::admin.settings', icon: 'cogs' }
 ] %}
 
-{{  component('components:tabs',{ 
+{{  component('semantic~tabs',{ 
         items: items,
         menu: { component: 'system:admin.extensions.menu.actions', extension: 'reports' },
         content: { component: 'reports::admin.reports' } 

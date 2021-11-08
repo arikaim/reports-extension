@@ -15,6 +15,10 @@
                 <td class="right aligned two wide">{{ labels.date }}</td>
                 <td>{{ report.date_created|dateTimeFormat }}</td>
             </tr>
+            <tr>
+                <td class="right aligned two wide">{{ labels.date_updated }}</td>
+                <td>{{ report.date_updated|dateTimeFormat }}</td>
+            </tr>
             {% if report.description is not empty %}
             <tr>
                 <td class="right aligned two wide">{{ labels.description }}</td>
@@ -22,13 +26,36 @@
                     {{ report.description }}
                 </td>
             </tr>
-            {% endif %}
+            {% endif %}           
+        </tbody>
+    </table>
+    <h4>{{ labels.fields }}</h4>
+    <table class="ui mini table definition very basic">
+        <thead>
             <tr>
-                <td class="right aligned two wide">{{ labels.fields }}</td>
+                <th class="two wide">{{ labels.date }}</th>
+                <th class="two wide">{{ labels.name }}</th>
+                <th class="five wide">{{ labels.title }}</th>
+                <th class="one wide">{{ labels.type }}</th>
+            </tr>           
+        </thead>
+        <tbody>
+            {% for field in report.fields().get() %}
+            <tr>
                 <td>
-                    
+                    {{ field.date_created|dateTimeFormat }}
+                </td>
+                <td>
+                    {{ field.name }}
+                </td>
+                <td>
+                    {{ field.title }}
+                </td>
+                <td>
+                    {{ field.type }}
                 </td>
             </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>

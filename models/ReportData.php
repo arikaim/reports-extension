@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 use Arikaim\Extensions\Reports\Classes\ReportInterface;
 use Arikaim\Extensions\Reports\Classes\ReportDataSourceInterface;
 use Arikaim\Core\Utils\TimePeriod;
-
+use Arikaim\Core\Db\Model as DbModel;
 use Arikaim\Core\Db\Traits\Uuid;
 use Arikaim\Core\Db\Traits\Find;
 use Arikaim\Core\Db\Traits\DateCreated;
@@ -43,6 +43,7 @@ class ReportData extends Model implements ReportDataSourceInterface
     protected $fillable = [
         'uuid',       
         'report_id',
+        'field_name',
         'value',    
         'date_created'
     ];
@@ -59,13 +60,15 @@ class ReportData extends Model implements ReportDataSourceInterface
      *
      * @param integer $reportId
      * @param mixed $value
+     * @param string|null $fieldName
      * @return boolean
      */
-    public function addValue(int $reportId, $value): bool
+    public function addValue(int $reportId, $value, ?string $fieldName = null): bool
     {
         $model = $this->create([            
-            'report_id' => $reportId,
-            'value'     => $value
+            'report_id'  => $reportId,
+            'value'      => $value,
+            'field_name' => (empty($fieldName) == true) ? null : $fieldName
         ]);
 
         return \is_object($model);
@@ -76,11 +79,17 @@ class ReportData extends Model implements ReportDataSourceInterface
      *
      * @param Builder $query
      * @param integer $reportId
+     * @param string|null $fieldName
      * @return Builder
      */
-    public function scopeReportDataQuery($query, int $reportId)
+    public function scopeReportDataQuery($query, int $reportId, ?string $fieldName = null)
     {
-        return $query->where('report_id','=',$reportId);
+        $query = $query->where('report_id','=',$reportId);
+        if (empty($fieldName) == false) {
+            return $query->where('field_name','=',$fieldName);
+        }
+
+        return $query;
     }
 
     /**
@@ -89,6 +98,7 @@ class ReportData extends Model implements ReportDataSourceInterface
      * @param Builder $query
      * @param integer $reportId
      * @param string $periodType
+     * @param string|null $fieldName
      * @param integer|null $day
      * @param integer|null $month
      * @param integer|null $year
@@ -96,8 +106,9 @@ class ReportData extends Model implements ReportDataSourceInterface
      */
     public function scopeDataQuery(
         $query,
-        int $reportId, 
-        string $periodType, 
+        int $reportId,      
+        string $periodType,
+        ?string $fieldName = null, 
         ?int $day = null, 
         ?int $month = null, 
         ?int $year = null
@@ -116,6 +127,10 @@ class ReportData extends Model implements ReportDataSourceInterface
                 $period = TimePeriod::getYearPeriod($month,$year);       
                 break;           
         }
+
+        if (empty($fieldName) == false) {
+            $query = $query->where('field_name','=',$fieldName);
+        }       
 
         return $query
                     ->where('report_id','=',$reportId)
@@ -136,8 +151,12 @@ class ReportData extends Model implements ReportDataSourceInterface
     public function getReportData(array $filter, string $period, ?int $day = null, ?int $month = null, ?int $year = null): array
     {
         $reportId = $filter['report_id'] ?? $this->report_id;
+        $fieldName =  $filter['field_name'] ?? $this->field_name;
 
-        return $this->dataQuery($reportId,$period,$day,$month,$year)->get()->toArray();
+        $query =  $this->dataQuery($reportId,$period,$fieldName,$day,$month,$year);
+
+        //echo DbModel::getSql($query);
+        return $this->dataQuery($reportId,$period,$fieldName,$day,$month,$year)->get()->toArray();
     }
 
     /**

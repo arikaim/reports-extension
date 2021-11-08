@@ -37,11 +37,12 @@ class ReportFieldsSchema extends Schema
         $table->relation('report_id','reports');       
         $table->string('type')->nullable(false);
         $table->string('name')->nullable(true);
+        $table->string('title')->nullable(true);
         $table->string('calc_handler')->nullable(true);
         $table->dateCreated();
         $table->dateUpdated();
         // index 
-        $table->unique(['report_id','type']);           
+        $table->unique(['report_id','type','name']);           
     }
 
     /**

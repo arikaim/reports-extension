@@ -5,6 +5,9 @@
         "details": "Details",
         "description": "Description",
         "fields": "Fields",
+        "name": "Name",
+        "type": "Calc Type",
+        "date_updated": "Date last update",
         "date": "Date Created"
     }
 }

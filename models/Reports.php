@@ -17,6 +17,7 @@ use Arikaim\Core\Db\Traits\Uuid;
 use Arikaim\Core\Db\Traits\Find;
 use Arikaim\Core\Db\Traits\Status;
 use Arikaim\Core\Db\Traits\DateCreated;
+use Arikaim\Core\Db\Traits\DateUpdated;
 
 /**
  * Reports class
@@ -26,6 +27,7 @@ class Reports extends Model
     use Uuid,
         Find,
         DateCreated,
+        DateUpdated,
         Status;
      
     /**
@@ -83,22 +85,70 @@ class Reports extends Model
     }
 
     /**
-     * Get summary data
+     * Get field
      *
-     * @param string $fieldType
+     * @param string|int $id
+     * @return mixed
+     */
+    public function field($id)
+    {
+        return $this->fields()->findById($id);
+    } 
+
+    /**
+     * Get summary data
+     *   
      * @param string $period
+     * @param string|null $fieldType
+     * @param string|null $name
      * @param integer|null $month
      * @param integer|null $year
      * @return array
      */
-    public function getSummaryData(string $fieldType, string $period, ?int $month = null, ?int $year = null): array
+    public function getSummaryData(
+        string $period, 
+        ?string $fieldType = null, 
+        ?string $name = null, 
+        ?int $month = null, 
+        ?int $year = null
+    ): array
     {
-        $model = $this->fields()->where('type','=',$fieldType)->first();
-        if (\is_object($model) == false) {
-            return [];
+        $query = $this->getSummaryQuery($period,$fieldType,$name,$month,$year);
+
+        return (\is_object($query) == true) ? $$query->get()->toArray() : [];
+    }
+
+    /**
+     * Get summary query
+     *   
+     * @param string $period
+     * @param string|null $fieldType
+     * @param string|null $name
+     * @param integer|null $month
+     * @param integer|null $year
+     * @return Builder|null
+     */
+    public function getSummaryQuery(
+        string $period, 
+        ?string $fieldType = null, 
+        ?string $name = null, 
+        ?int $month = null, 
+        ?int $year = null
+    )
+    {
+        if ((empty($name) == true) && (empty($fieldType) == true)) {
+            return null;
+        }
+        $field = (empty($fieldType) == false) ? $this->fields()->where('type','=',$fieldType) : $this->fields();
+        if (empty($name) == false) {
+            $field->where('name','=',$name);
+        }
+        $field = $field->first();
+        if (\is_object($field) == false) {
+            return null;
         }
 
-        return $model->getSummary($period,null,$month,$year);
+        return $field->getSummaryQuery($period,null,$month,$year);
     }
 
     /**

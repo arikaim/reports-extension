@@ -42,6 +42,8 @@ class ReportUpdate
             $result = Self::updateFieldSummary($field,$dataSource,$day,$month,$year);
             $errors += ($result == true) ? 0 : 1;
         }
+    
+        $report->setDateUpdated();
 
         return ($errors == 0);
     }
@@ -64,8 +66,11 @@ class ReportUpdate
         $dataColumn = $dataSource->getDataColumnName();
 
         // daily summary      
-        $data = $dataSource->getReportData(['report_id' => $field->report_id],'daily',$day);
-        $summary = Self::calcSummaryValue($data,$field,$dataColumn);      
+        $data = $dataSource->getReportData([
+            'report_id'  => $field->report_id,
+            'field_name' => $field->name
+        ],'daily',$day);
+        $summary = Self::calcSummaryValue($data,$field,$dataColumn);   
         $field->saveSummaryValue($summary,'daily',$day,$month,$year);  
     
         // monthly summary    
@@ -101,6 +106,10 @@ class ReportUpdate
        
         if ($field->type == ReportInterface::CALC_TYPE_AVG) {
             $summary = ($summary / \count($values));
+        }
+
+        if ($field->type == ReportInterface::CALC_TYPE_SINGLE_VALUE) {
+            $summary = \end($values);          
         }
 
         return $summary;

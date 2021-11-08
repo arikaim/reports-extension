@@ -43,11 +43,15 @@ class ReportsApi extends ApiController
             $type = $data->getString('type','line');
             $month = $data->getString('month',null);
             $year = $data->getString('year',null);
-          
+            $fieldName = $data->getString('field_name',null);
+            $fieldType = $data->getString('field_type',null);
+
             $report = Model::Reports('reports')->findReport($reportSlug); 
-            $summary = $report->getSummaryData('count',$period,$month,$year);
-            $data = \array_column($summary,'value');                    
+            $summary = $report->getSummaryQuery($period,$fieldType,$fieldName,$month,$year);
+            $summary = (\is_object($summary) == true) ? $summary->get()->keyBy('day')->toArray() : [];         
+            $data = ChartReport::getData($period,$summary);
             $labels = ChartReport::getLabels($period);
+
             $chartConfig = [
                 'type' => $type,
                 'data' => [
@@ -67,7 +71,7 @@ class ReportsApi extends ApiController
                 ]
             ];
 
-            $this->setResponse(\is_object($report),function() use($chartConfig,$period,$month,$year) { 
+            $this->setResponse(\is_object($report),function() use($chartConfig,$period,$month,$year) {                
                 $this
                     ->message('read')
                     ->field('period',$period)

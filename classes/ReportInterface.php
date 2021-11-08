@@ -14,10 +14,11 @@ namespace Arikaim\Extensions\Reports\Classes;
  */
 interface ReportInterface 
 {  
-    const CALC_TYPE_AVG    = 'avg';
-    const CALC_TYPE_SUM    = 'sum';
-    const CALC_TYPE_COUNT  = 'count';
-    const CALC_TYPE_CUSTOM = 'custom';
+    const CALC_TYPE_AVG          = 'avg';
+    const CALC_TYPE_SUM          = 'sum';
+    const CALC_TYPE_COUNT        = 'count';
+    const CALC_TYPE_CUSTOM       = 'custom';
+    const CALC_TYPE_SINGLE_VALUE = 'single';
 
     const CALC_PERIOD_DAILY   = 'daily';
     const CALC_PERIOD_WEEKLY  = 'weekly';

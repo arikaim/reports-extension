@@ -11,7 +11,6 @@ namespace Arikaim\Extensions\Reports\Service;
 
 use Psr\Container\ContainerInterface;
 
-use Arikaim\Extensions\Reports\Classes\ReportInterface;
 use Arikaim\Core\Db\Model;
 use Arikaim\Core\Service\Service;
 use Arikaim\Core\Service\ServiceInterface;
@@ -35,14 +34,14 @@ class Reports extends Service implements ServiceInterface
      * Create report
      *
      * @param string $slug
-     * @param string $title
+     * @param string|null $title
      * @param array $details
      * @return bool
      */
-    public function create(string $slug, string $title, array $details = []): bool
+    public function create(string $slug, ?string $title = null, array $details = []): bool
     {
         $model = Model::Reports('reports');  
-        $details['title'] = $title;
+        $details['title'] = $title ?? $slug;
         $created = $model->saveReport($slug,$details);
 
         return \is_object($created);
@@ -53,18 +52,20 @@ class Reports extends Service implements ServiceInterface
      *
      * @param string $reportSlug
      * @param float|int $value
+     * @param string|null $fieldName
      * @return boolean
      */
-    public function addValue(string $reportSlug, $value): bool
+    public function addValue(string $reportSlug, $value, ?string $fieldName = null): bool
     {
-        $model = Model::Reports('reports')->findReport($reportSlug);     
-        if (\is_object($model) == false) {
-            return false;
+        $model = Model::Reports('reports');
+        $report = $model->findReport($reportSlug);     
+        if (\is_object($report) == false) {
+            return false;                  
         }  
         
         $data = Model::ReportData('reports');
 
-        return $data->addValue($model->id,$value);
+        return $data->addValue($report->id,$value,$fieldName);
     }
 
     /**
@@ -72,9 +73,11 @@ class Reports extends Service implements ServiceInterface
      *
      * @param string $reportSlug    
      * @param string $type
+     * @param string|null $name
+     * @param string|null $title
      * @return boolean
      */
-    public function addField(string $reportSlug, string $type): bool
+    public function addField(string $reportSlug, string $type, ?string $name = null, ?string $title = null): bool
     {
         $model = Model::Reports('reports')->findReport($reportSlug);     
         if (\is_object($model) == false) {
@@ -83,7 +86,7 @@ class Reports extends Service implements ServiceInterface
 
         $fields = Model::ReportFields('reports');
        
-        return $fields->saveField($model->id,$type);        
+        return $fields->saveField($model->id,$type,$name,$title);        
     }
     
     public function getValue(string $reportSlug, string $type, string $period)

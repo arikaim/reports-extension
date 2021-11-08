@@ -44,6 +44,7 @@ class ReportFields extends Model
         'report_id',
         'calc_handler',
         'name',
+        'title',
         'type',    
         'date_created',
         'date_updated'
@@ -149,13 +150,19 @@ class ReportFields extends Model
      * @param Builder $query
      * @param integer $reportId
      * @param string $type
+     * @param string|null $name
      * @return Builder
      */
-    public function scopeField($query, int $reportId, string $type)
+    public function scopeField($query, int $reportId, string $type, ?string $name = null)
     {
-        return $query
+        $query = $query
             ->where('type','=',$type)
             ->where('report_id','=',$reportId);
+        if (empty($name) == false) {
+            $query->where('name','=',$name);
+        }
+
+        return $query;
     }
 
     /**
@@ -177,15 +184,19 @@ class ReportFields extends Model
      *
      * @param integer $reportId
      * @param string $type
+     * @param string|null $name
+     * @param string|null $title
      * @return boolean
      */
-    public function saveField(int $reportId, string $type): bool
+    public function saveField(int $reportId, string $type, ?string $name = null, ?string $title = null): bool
     {
-        $model = $this->field($reportId,$type)->first();
+        $model = $this->field($reportId,$type,$name)->first();
         if (\is_object($model) == false) {
             $created = $this->create([
                 'report_id' => $reportId,
-                'type'      => $type
+                'type'      => $type,
+                'name'      => (empty($name) == true) ? null : $name,
+                'title'     => $title
             ]);
     
             return \is_object($created);

@@ -49,7 +49,7 @@ class CalculateReportsJob extends CronJob implements RecurringJobInterface, JobI
        
         $errors = 0;
         foreach ($reports as $report) {
-            $result = ReportUpdate::updateReport($report);
+            $result = ReportUpdate::updateReport($report,(date('d') - 1));
             $errors += ($result == false) ? 1 : 0;              
         }
 

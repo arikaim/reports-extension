@@ -7,7 +7,7 @@
         <div class="ui two column divided grid">
             <div class="column" id="report_chart">            
                 {% if report is not empty %}
-                    {{ component('reports::chart',{ report_id: report.id }) }}
+                    {{ component('reports::admin.reports.details.chart',{ report_id: report.id }) }}
                 {% endif %}
             </div>
             <div class="column" id="report_summary">  

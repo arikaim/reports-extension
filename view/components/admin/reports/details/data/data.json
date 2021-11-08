@@ -1,7 +1,8 @@
 {
     "columns": {
         "date": "Date",
-        "value": "Value"
+        "value": "Value",
+        "field": "Field Name"
     },
     "labels": {
         "data": "Raw Data"

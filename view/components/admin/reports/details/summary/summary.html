@@ -1,21 +1,23 @@
-
-{% set report = createModel('Reports','reports').findById(report_id) %}
-{% set data = report.fields().summary() %}
 <h4>{{ title|default(labels.data) }}</h4>
-<table class="ui compact stackable selectable borderless basic definition mini table">
-    <thead>
-        <tr>              
-            <th class="one wide collapsing left aligned">{{ columns.date }}</th>
-            <th class="one wide">{{ columns.value }}</th>                                                                            
-        </tr>
-    </thead>
-    <tbody id="share_rows" component="reports::admin.reports.details.data" namespace="reports.summary">
-        {% set items = paginate(data,'reports.summary') %}
-        {% for item in items.getItems() %}
-        <tr>
-            <td>{{ item.date_created|dateTimeFormat }}</td>
-            <td>{{ item.value }}</td>
-        </tr>        
-        {% endfor %}
-    </tbody>
-</table>
+<div class="mt-4">
+    <h4>
+        {{ field.title|default(field.name) }}
+    </h4>
+    <div>
+        <span class="font-bold px-2">
+            {{ labels.field }}
+        </span>
+        {{  component('reports::admin.reports.fields',{ 
+                class: 'selection basic button mini',
+                report_id: report_id, 
+                id: 'field_summary_dropdown' 
+            }) 
+        }}
+    </div>
+    <div class="ui divider"></div>
+    <div id="field_summary_content" class="mt-2">
+        {% if field is not empty %}
+            {{ component('reports::admin.reports.details.summary.field',{ field_id: field_id }) }}
+        {% endif %}
+    </div>
+</div>
