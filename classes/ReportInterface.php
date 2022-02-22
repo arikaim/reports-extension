@@ -25,4 +25,20 @@ interface ReportInterface
     const CALC_PERIOD_MONTHLY = 'monthly';
     const CALC_PERIOD_YEARLY  = 'yearly';
     const CALC_PERIOD_ALL     = 'all';
+
+    /**
+     * Get report data
+     *   
+     * @param string $period
+     * @param integer|null $day
+     * @param integer|null $month
+     * @param integer|null $year
+     * @return array
+     */
+    public function getReportData(
+        string $period, 
+        ?int $day = null, 
+        ?int $month = null, 
+        ?int $year = null
+    ): array;
 }

@@ -35,7 +35,7 @@ class ReportsSchema extends Schema
         $table->id();
         $table->prototype('uuid');   
         $table->status();    
-        $table->userid();    
+        $table->userId();    
         $table->string('title')->nullable(false);
         $table->slug(false);
         $table->integer('editable')->nullable(true); 

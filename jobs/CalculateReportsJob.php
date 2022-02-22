@@ -14,7 +14,6 @@ use Arikaim\Core\Db\Model;
 use Arikaim\Extensions\Reports\Classes\ReportUpdate;
 use Arikaim\Extensions\Reports\Classes\ReportInterface;
 
-
 use Arikaim\Core\Utils\TimePeriod;
 use Arikaim\Core\Interfaces\Job\RecurringJobInterface;
 use Arikaim\Core\Interfaces\Job\JobInterface;
