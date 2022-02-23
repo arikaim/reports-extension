@@ -1,0 +1,15 @@
+{   
+    "labels": {
+        "title": "Title",
+        "slug": "Slug",
+        "details": "Details",
+        "description": "Description",
+        "fields": "Fields",
+        "name": "Name",
+        "type": "Calc Type",
+        "data_source": "Data Source",
+        "date_updated": "Date last update",
+        "data": "Data Column",
+        "date": "Date Created"
+    }
+}

@@ -1,0 +1,18 @@
+{% set report = createModel('Reports','reports').findById(report_id) %}
+{% set data = report.getDataSource(false) %}
+
+{% if field_id is not empty %}
+    {% set field = report.getField(field_id) %}
+    {{ field|dump }}
+{% endif %}
+
+{% set data = data.orderBy('id') %}
+{% set items = paginate(data,'reports.raw') %}
+
+{% for item in items.getItems() %}
+<tr>
+    <td>{{ item.date_created|dateFormat }}</td>
+    <td>{{ item.id }}</td>
+    <td>{{ item.field_name }}</td>
+</tr>        
+{% endfor %}

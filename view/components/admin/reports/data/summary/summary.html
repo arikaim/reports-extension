@@ -1,0 +1,22 @@
+<h4>{{ title|default(labels.data) }}</h4>
+<div class="mt-4">
+    <h4>
+        {{ field.title|default(field.name) }}
+    </h4>
+    <div>
+        <span class="font-bold px-2">
+            {{ labels.field }}
+        </span>
+        {{  component('reports::admin.reports.fields',{ 
+                class: 'selection basic button mini',
+                report_id: report_id, 
+                id: 'field_summary_dropdown' 
+            }) 
+        }}
+    </div>   
+    <div id="field_summary_content" class="mt-2">
+        {% if field is not empty %}
+            {{ component('reports::admin.reports.details.summary.field',{ field_id: field_id }) }}
+        {% endif %}
+    </div>
+</div>

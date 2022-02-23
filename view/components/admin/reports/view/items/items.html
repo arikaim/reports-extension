@@ -1,0 +1,42 @@
+{% set reports = createModel('Reports','reports') %}
+{% set reports = reports.get() %}
+
+{% if reports|length == 0 %}
+<div class="item">
+    {{ labels.empty }}
+</div>
+{% endif %}
+
+{% for report in reports %}
+    <div class="item">      
+        <div class="content">
+            <button 
+                class="ui basic mini icon button view-report" 
+                uuid="{{ report.uuid }}">
+                <i class="icon chart bar outline blue"></i>
+            </button>
+            <button 
+                class="ui basic mini icon button report-details" 
+                uuid="{{ report.uuid }}">
+                <i class="icon info blue"></i>
+            </button>
+            {{ report.title }}
+            <div class="ui basic label">
+                <span class="ui text blue">
+                    {{ labels.slug }}
+                </span>
+                <span class="pl-2">
+                    {{ report.slug }}
+                </span>                   
+            </div>                       
+            <div class="ui basic label right floated">
+                <span class="ui text blue">
+                    {{ labels.created }}
+                </span>
+                <span class="pl-2">
+                    {{ report.date_created|dateTimeFormat }}
+                </span>    
+            </div>
+        </div>
+    </div>
+{% endfor %}

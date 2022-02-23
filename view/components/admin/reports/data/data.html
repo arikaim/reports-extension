@@ -1,0 +1,34 @@
+{% set report = createModel('Reports','reports').findById(uuid) %}
+<div class="ui segment">
+    <span class="pr-2 font-bold">{{ labels.report }}</span>
+    {{ component('reports::admin.reports.dropdown',{ class: 'basic button', selected: uuid, data_field: 'id' }) }}
+</div>
+<div class="ui two column grid">
+    <div class="column" >            
+        {% if report is not empty %}
+            <div class="ui segment" id="report_chart">
+                {{ component('reports::admin.reports.data.chart',{ report_id: report.id }) }}
+            </div>            
+        {% endif %}
+    </div>
+    <div class="column">  
+        {% if report is not empty %}
+            <div class="ui segment" id="report_summary">
+                {{ component('reports::admin.reports.data.summary',{ report_id: report.id }) }}
+            </div> 
+        {% endif %}
+    </div>  
+</div>
+<!--
+<div class="ui two column grid">
+    <div class="column"> 
+        <div class="ui segment" id="report_data">
+            {% if report is not empty %}
+                {{ component('reports::admin.reports.data.data',{ report_id: report.id }) }}
+            {% endif %}
+        </div>
+    </div>        
+    <div class="column">
+    </div>
+</div>
+-->

@@ -1,0 +1,10 @@
+{
+    "columns": {
+        "date": "Date",
+        "value": "Value"
+    },
+    "labels": {
+        "field": "Field",
+        "data": "Summary"
+    }
+}

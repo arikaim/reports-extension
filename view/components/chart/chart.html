@@ -1,0 +1,45 @@
+{% if field_id is not empty %}
+    {% set field = createModel('ReportFields','reports').findById(field_id) %}
+    {% set report_id = field.report_id %}
+    {% set field_name = field.name %}
+    {% set field_type = field.type %}
+{% endif %}
+{% if report_id is not empty %}
+    {% set report = createModel('Reports','reports').findById(report_id) %}
+{% endif %}
+
+{% set canvas_id = canvas_id|default('chart_canvas') %}
+{% set year = year|date('Y') %}
+{% set month = month|date('n') %}
+{% set period = period|default('daily') %}
+
+<chart 
+    class="block report-chart {{ class }}" 
+    report-slug="{{ report.slug }}"
+    period="{{ period }}"
+    type="{{ type|default('line') }}"
+    month="{{ month }}"
+    year="{{ year }}"
+    canvas-id="{{ canvas_id }}"
+    field-name="{{ field_name }}"
+    field-type="{{ field_type }}">
+    <div class="p-1">
+        <div class="flex w-full flex-row items-end">
+            <div class="flex-grow">
+            </div>
+            <div class="self-end px-2">
+                <span class="font-bold">{{ labels.type }}</span> 
+                {{ period }}
+            </div>
+            <div class="self-end px-2">
+                <span class="font-bold">{{ labels.month }}</span> 
+                {{ month }}
+            </div>
+            <div class="self-end px-2">
+                <span class="font-bold">{{ labels.year }}</span> 
+                {{ year }}
+            </div>           
+        </div>
+        <canvas id="{{ canvas_id }}"></canvas>
+    </div>
+</chart>
