@@ -19,6 +19,7 @@ use Arikaim\Core\Db\Traits\Find;
 use Arikaim\Core\Db\Traits\Status;
 use Arikaim\Core\Db\Traits\DateCreated;
 use Arikaim\Core\Db\Traits\DateUpdated;
+use Arikaim\Core\Db\Traits\UserRelation;
 use Exception;
 
 /**
@@ -51,6 +52,7 @@ class Reports extends Model
         'public',
         'description',
         'slug',
+        'user_id',
         'category',
         'editable',
         'data_source',

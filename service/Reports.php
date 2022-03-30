@@ -36,21 +36,23 @@ class Reports extends Service implements ServiceInterface
      * @param string $slug
      * @param string|null $dataSource
      * @param string|null $title
-     * @param array $details
+     * @param int|null $userId
      * @return bool
      */
     public function create(
         string $slug, 
         ?string $dataSource = null, 
         ?string $title = null, 
-        array $details = []
+        ?int $userId = null
     ): bool
     {
         $model = Model::Reports('reports');  
-        $details['title'] = $title ?? $slug;
-        $details['data_source'] = $dataSource;
-        
-        $created = $model->saveReport($slug,$details);
+        $details = [
+            'title'         => $title ?? $slug,
+            'data_source'   => $dataSource
+        ];
+
+        $created = $model->saveReport($slug,$details,$userId);
 
         return \is_object($created);
     }
