@@ -1,14 +1,10 @@
 {% component 'semantic~tabs.vertical.content' %}
     {% set class = 'six wide column' %}
-    {% if hasExtension('ip') == false %}
-        <div class="ui warning message">{{ message }}</div>
-    {% else %}
-        {% set disabled = (demo_mode == true) ? 'disabled' : '' %}
-        <div class="mt-4 {{ disabled }}">
-            {{ component('queue::admin.jobs.status.toggle',{ job_name: 'calculateReports' }) }} 
-        </div>
-        <div class="mt-4" id="job_form_content">  
-            {{ component('queue::admin.jobs.config',{ uuid: 'calculateReports' }) }}
-        </div>
-    {% endif %}
+    {% set disabled = (demo_mode == true) ? 'disabled' : '' %}
+    <div class="mt-4 {{ disabled }}">
+        {{ component('queue::admin.jobs.status.toggle',{ job_name: 'calculateReports' }) }} 
+    </div>
+    <div class="mt-4" id="job_form_content">  
+        {{ component('queue::admin.jobs.config',{ uuid: 'calculateReports' }) }}
+    </div>
 {% endcomponent %}
