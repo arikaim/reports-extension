@@ -1,0 +1,97 @@
+{% set report = createModel('Reports','reports').findById(uuid) %}
+<div class="ui segment">
+    <h4>{{ title|default(labels.details) }}</h4>
+    <table class="ui mini table definition very basic">
+        <tbody>
+            <tr>
+                <td class="right aligned two wide">{{ labels.id }}</td>
+                <td>
+                    <div class="ui basic mini label">
+                        {{ report.id }}
+                    </div>
+                    {{ report.uuid }}
+                </td>
+            </tr>
+            <tr>
+                <td class="right aligned two wide">{{ labels.title }}</td>
+                <td>{{ report.title }}</td>
+            </tr>
+            <tr>
+                <td class="right aligned two wide">{{ labels.status }}</td>
+                <td>{{ component('semantic~status.label',{ status: report.status }) }}</td>
+            </tr>
+            <tr>
+                <td class="right aligned two wide">{{ labels.slug }}</td>
+                <td>{{ report.slug }}</td>
+            </tr>
+            <tr>
+                <td class="right aligned two wide">{{ labels.data_source }}</td>
+                <td>{{ report.data_source }}</td>
+            </tr>
+            <tr>
+                <td class="right aligned two wide">{{ labels.data_filter }}</td>
+                <td>
+                    {% if report.data_filter is iterable %}   
+                        <ul class="ui list">
+                            {% for key, value in report.data_filter %}
+                                <li>{{ key }} = {{ value }}</li>
+                            {% endfor %}
+                        </ul>
+                       
+                    {% else %} 
+                        {{ report.data_filter }}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td class="right aligned two wide">{{ labels.user }}</td>
+                <td>{{ report.user.user_name_or_email }}</td>
+            </tr>
+            <tr>
+                <td class="right aligned two wide">{{ labels.date }}</td>
+                <td>{{ report.date_created|dateTimeFormat }}</td>
+            </tr>
+            <tr>
+                <td class="right aligned two wide">{{ labels.date_updated }}</td>
+                <td>{{ report.date_updated|dateTimeFormat }}</td>
+            </tr>
+            {% if report.description is not empty %}
+            <tr>
+                <td class="right aligned two wide">{{ labels.description }}</td>
+                <td>
+                    {{ report.description }}
+                </td>
+            </tr>
+            {% endif %}           
+        </tbody>
+    </table>
+    <h4>{{ labels.fields }}</h4>
+    <table class="ui mini table definition very basic">
+        <thead>
+            <tr>
+                <th class="two wide">{{ labels.name }}</th>
+                <th class="five wide">{{ labels.title }}</th>
+                <th class="five wide">{{ labels.data }}</th>
+                <th class="three wide">{{ labels.type }}</th>
+            </tr>           
+        </thead>
+        <tbody>
+            {% for field in report.fields().get() %}
+            <tr>
+                <td class="center aligned">
+                    {{ field.name }}
+                </td>
+                <td>
+                    {{ field.title }}
+                </td>
+                <td>
+                    {{ field.data_column }}
+                </td>
+                <td>
+                    {{ field.type }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,13 @@
+{{  component('semantic~tabs.vertical',{ 
+        items: [ 
+            { title: labels.list, component: 'reports::admin.reports.view', icon: 'list', active: true }
+        ], 
+        menu: { id: 'reports_menu' }, 
+        item_class: 'reports-tab-item',
+        content: {
+            id: 'reports_content',
+            component: 'reports::admin.reports.view',
+            params: params 
+        } 
+    })
+}}

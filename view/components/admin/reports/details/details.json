@@ -1,0 +1,19 @@
+{   
+    "labels": {
+        "id": "Id",
+        "title": "Title",
+        "slug": "Slug",
+        "user": "User",
+        "details": "Details",
+        "description": "Description",
+        "fields": "Fields",
+        "name": "Name",
+        "status": "Status",
+        "type": "Calc Type",
+        "data_source": "Data Source",
+        "data_filter": "Data Filter",
+        "date_updated": "Date last update",
+        "data": "Data Column",
+        "date": "Date Created"
+    }
+}

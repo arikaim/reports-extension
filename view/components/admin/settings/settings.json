@@ -1,0 +1,9 @@
+{
+    "title": {
+        "content": "Settings",
+        "icon": "cogs"
+    },
+    "labels": {  
+        "jobs": "Jobs"     
+    }
+}

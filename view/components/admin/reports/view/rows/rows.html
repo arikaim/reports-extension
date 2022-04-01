@@ -1,0 +1,44 @@
+{% set reports = createModel('Reports','reports').orderBy('id') %}
+{% set items = paginate(reports,'reports') %}
+{% set items = items.getItems() %}
+{% if items|length == 0 %}
+<tr>
+    <td class="4">
+        {{ labels.empty }}
+    </td>
+</tr>
+{% endif %}
+
+{% for report in items %}
+    <tr id="row_{{ report.uuid }}">      
+        <td class="content">
+            <button 
+                class="ui basic mini icon button view-report" 
+                title="{{ labels.data }}"
+                uuid="{{ report.uuid }}">
+                <i class="icon chart bar outline blue"></i>
+            </button>
+            <button 
+                class="ui basic mini icon button report-details" 
+                title="{{ labels.details }}"
+                uuid="{{ report.uuid }}">
+                <i class="icon info blue"></i>
+            </button>
+        </td>
+        <td>
+            {{ report.date_created|dateFormat }}
+        </td>
+        <td>
+            {{ component('semantic~status.dropdown',{ status: report.status, uuid: report.uuid, skip: [2,3,4,5] }) }} 
+        </td>
+        <td>
+            {{ report.title }}
+        </td>
+        <td>
+            {{ report.slug }}
+        </td>  
+        <td>
+            {{ report.user.user_name_or_email }}
+        </td> 
+    </tr>
+{% endfor %}

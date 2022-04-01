@@ -1,0 +1,26 @@
+<div class="ui two column grid">
+    <div class="column">
+        <div class="ui segment">
+            <table class="ui compact stackable borderless basic table mt-2">
+                <thead>
+                    <tr class="table-head">                          
+                        <th class="three wide">{{ columns.action }}</th>
+                        <th class="three wide">{{ columns.date }}</th>     
+                        <th class="three wide">{{ columns.status }}</th>
+                        <th>{{ columns.title }}</th>
+                        <th>{{ columns.slug }}</th>
+                        <th>{{ columns.user }}</th>      
+                    </tr>
+                </thead>
+                <tbody id="items_list" component="reports::admin.reports.view.rows" namespace="reports">
+                    {{ component('reports::admin.reports.view.rows') }}   
+                </tbody>  
+            </table>
+            <div class="mt-2">
+                {{ component('semantic~paginator',{ namespace: 'reports' }) }}
+            </div>
+        </div>
+    </div>
+    <div class="column" id="report_details">
+    </div>
+</div>

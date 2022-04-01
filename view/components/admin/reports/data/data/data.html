@@ -1,0 +1,30 @@
+<h4>{{ title|default(labels.data) }}</h4>
+<div>
+    <span class="font-bold px-2">
+        {{ columns.field }}
+    </span>
+    {{  component('reports::admin.reports.fields',{ 
+            class: 'selection basic button mini',
+            report_id: report_id, 
+            id: 'field_data_dropdown' 
+        }) 
+    }}
+</div>
+<table class="ui compact stackable selectable borderless basic definition mini table">
+    <thead>
+        <tr>              
+            <th class="one wide collapsing left aligned">{{ columns.date }}</th>
+            <th class="one wide">{{ columns.value }}</th>      
+            <th class="one wide">{{ columns.field }}</th>                                                                            
+        </tr>
+    </thead>
+    <tbody id="field_data_rows" component="reports::admin.reports.data.data.rows" namespace="reports.raw">
+        {% if report_id is not empty %}
+            {{  component('reports::admin.reports.data.data.rows',{ 
+                    report_id: report_id, 
+                    field_name: field_name 
+                }) 
+            }}
+        {% endif %}
+    </tbody>
+</table>

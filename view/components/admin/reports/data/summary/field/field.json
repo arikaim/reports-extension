@@ -1,0 +1,13 @@
+{
+    "columns": {
+        "date": "Date",
+        "period": "Period",
+        "day": "Day",
+        "month": "Month",
+        "year": "Year",
+        "value": "Value"
+    },
+    "labels": {
+        "data": "Summary"
+    }
+}

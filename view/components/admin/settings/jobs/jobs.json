@@ -1,0 +1,19 @@
+{
+    "title": {
+        "content": "Jobs",
+        "icon": "redo alternate"
+    },
+    "message": "IP Geolocation extension not installed.",
+    "labels": {
+        "install": "Install Games",
+        "feed": "Use Games Feed",
+        "from": "From Page",
+        "demo": "Disabled in demo mode",
+        "to": "To Page",
+        "max": "Max games install per job run",
+        "current": "Current Feed Item"
+    },
+    "descriptions": {
+        "install": ""
+    }
+}
