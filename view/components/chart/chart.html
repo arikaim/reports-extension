@@ -12,7 +12,6 @@
 {% set year = year|date('Y') %}
 {% set month = month|date('n') %}
 {% set period = period|default('daily') %}
-
 <chart 
     class="block report-chart {{ class }}" 
     report-uuid="{{ report.uuid }}"
@@ -32,13 +31,13 @@
             {% endif %}
             <div class="self-end px-2">
                 <span>
-                    {{ month|date('F') }}
+                    {{ component('semantic~date.month.name',{ month: month }) }}
                 </span>
                 -
                 <span>
                     {{ year }}
                 </span>
-            </div>        
+            </div>         
         </div>
         <canvas id="{{ canvas_id }}"></canvas>
     </div>
