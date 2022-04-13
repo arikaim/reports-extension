@@ -5,7 +5,7 @@
     "type": "system",
     "description": "Manage reports.",
     "short-description": "Reports system.",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "repository": "https://github.com/arikaim/reports-extension.git",
     "position": "2",
     "admin-menu": {        
