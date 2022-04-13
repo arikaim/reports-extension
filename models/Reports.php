@@ -148,17 +148,12 @@ class Reports extends Model
     /**
      * Get field
      *
-     * @param string|int $name
+     * @param string $name
      * @return Model|null
      */
-    public function getField($name)
+    public function getField(string $name)
     {
-        $model = $this->fields()->whereHas('id','=',$name)->first();
-        if (\is_object($model) == true) {
-            return $model;
-        }
-
-        return $this->fields()->where('name','=',$name)->first();
+        return $this->fields->where('name','=',$name)->first();
     } 
 
     /**

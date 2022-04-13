@@ -25,20 +25,20 @@
     field-type="{{ field_type }}">
     <div class="p-1">
         <div class="flex w-full flex-row items-end">
-            <div class="flex-grow">
-            </div>
-            <div class="self-end px-2">
-                <span class="font-bold">{{ labels.type }}</span> 
+            {% if hode_period != true %}
+            <div class="self-end px-2 font-bold">               
                 {{ period }}
             </div>
+            {% endif %}
             <div class="self-end px-2">
-                <span class="font-bold">{{ labels.month }}</span> 
-                {{ month }}
-            </div>
-            <div class="self-end px-2">
-                <span class="font-bold">{{ labels.year }}</span> 
-                {{ year }}
-            </div>           
+                <span>
+                    {{ month|date('F') }}
+                </span>
+                -
+                <span>
+                    {{ year }}
+                </span>
+            </div>        
         </div>
         <canvas id="{{ canvas_id }}"></canvas>
     </div>
