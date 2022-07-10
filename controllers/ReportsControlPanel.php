@@ -43,11 +43,22 @@ class ReportsControlPanel extends ControlPanelApiController
     */
     public function deleteController($request, $response, $data) 
     {    
-        $this->onDataValid(function($data) {
-            $uuid = $data->get('uuid');
-            $report = Model::Reports('reports')->findById($uuid); 
-        });
-        $data->validate();    
+        $data->validate(true);   
+        $uuid = $data->get('uuid');
+        $report = Model::Reports('reports')->findById($uuid); 
+        
+        if (\is_object($report) == false) {
+            $this->error('Not valid report id');
+            return false;
+        }
+
+        $result = $report->deleteReport();
+
+        $this->setResponse($result,function() use($uuid) {                
+            $this
+                ->message('delete')
+                ->field('uuid',$uuid);                    
+        },'errors.delete');
     }
 
     /**
@@ -60,20 +71,21 @@ class ReportsControlPanel extends ControlPanelApiController
     */
     public function deleteDataController($request, $response, $data) 
     {    
-        $this->onDataValid(function($data) {
-            $uuid = $data->get('uuid');
-            $report = Model::Reports('reports')->findById($uuid); 
+        $data->validate(true);    
+        $uuid = $data->get('uuid');
+        $report = Model::Reports('reports')->findById($uuid); 
 
-            $result = $report->deleteData();
+        if (\is_object($report) == false) {
+            $this->error('Not valid report id');
+            return false;
+        }
+      
+        $result = $report->deleteData();
 
-            exit();
-            
-            $this->setResponse($result,function() use($uuid) {                
-                $this
-                    ->message('delete_data')
-                    ->field('uuid',$uuid);                    
-            },'errors.update');
-        });
-        $data->validate();    
+        $this->setResponse($result,function() use($uuid) {                
+            $this
+                ->message('delete_data')
+                ->field('uuid',$uuid);                    
+        },'errors.delete_data');
     }
 }

@@ -5,7 +5,7 @@ arikaim.component.onLoaded(function() {
         var uuid = $(element).attr('uuid');
       
         modal.confirmDelete({ 
-            title: 'Confir Delete',
+            title: 'Confirm Delete',
             description: 'Delete report data'
         },function() {
             reportsAdmin.deleteReportData(uuid,function(result) {

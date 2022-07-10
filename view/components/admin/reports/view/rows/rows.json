@@ -2,6 +2,7 @@
     "labels": {
         "empty": "..",
         "details": "Report Details",
+        "delete": "Delete Report",
         "data": "View Report Data"
     }
 }
