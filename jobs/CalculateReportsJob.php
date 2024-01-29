@@ -9,30 +9,25 @@
 */
 namespace Arikaim\Extensions\Reports\Jobs;
 
-use Arikaim\Core\Queue\Jobs\CronJob;
 use Arikaim\Core\Db\Model;
 use Arikaim\Extensions\Reports\Classes\ReportUpdate;
-use Arikaim\Core\Interfaces\Job\RecurringJobInterface;
+use Arikaim\Core\Queue\Jobs\Job;
 use Arikaim\Core\Interfaces\Job\JobInterface;
 use Arikaim\Core\Utils\DateTime;
 
 /**
  * Calculate reports cron job
  */
-class CalculateReportsJob extends CronJob implements RecurringJobInterface, JobInterface
+class CalculateReportsJob extends Job implements JobInterface
 {
     /**
-     * Constructor
+     * Init job
      *
-     * @param string|null $extension
-     * @param string|null $name
-     * @param array $params
+     * @return void
      */
-    public function __construct(?string $extension = null, ?string $name = null, array $params = [])
+    public function init(): void
     {
-        parent::__construct($extension,$name,$params);
-        
-        $this->runEveryDay();
+        $this->setName('reports.calculate');
     }
 
     /**
