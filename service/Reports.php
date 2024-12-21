@@ -9,8 +9,6 @@
 */
 namespace Arikaim\Extensions\Reports\Service;
 
-use Psr\Container\ContainerInterface;
-
 use Arikaim\Core\Db\Model;
 use Arikaim\Core\Service\Service;
 use Arikaim\Core\Service\ServiceInterface;
@@ -21,13 +19,13 @@ use Arikaim\Core\Service\ServiceInterface;
 class Reports extends Service implements ServiceInterface
 {
     /**
-     * Constructor
+     * Boot service
+     *
+     * @return void
      */
-    public function __construct(?ContainerInterface $container = null)
+    public function boot()
     {
         $this->setServiceName('reports');
-
-        parent::__construct($container);
     }
 
     /**
@@ -71,15 +69,13 @@ class Reports extends Service implements ServiceInterface
      */
     public function addValue(string $reportSlug, $value, ?string $fieldName = null): bool
     {
-        $model = Model::Reports('reports');
-        $report = $model->findReport($reportSlug);     
-        if (\is_object($report) == false) {
+        $report = Model::Reports('reports')->findReport($reportSlug);        
+        if ($report == null) {
             return false;                  
         }  
         
-        $data = Model::ReportData('reports');
-
-        return $data->addValue($report->id,$value,$fieldName);
+        return Model::ReportData('reports')
+            ->addValue($report->id,$value,$fieldName);
     }
 
     /**

@@ -128,7 +128,7 @@ class Reports extends Model
     /**
      * Report data relation
      *
-     * @return Relation
+     * @return mixed
      */
     public function data()
     {
@@ -138,7 +138,7 @@ class Reports extends Model
     /**
      * Report summary fields relation
      *
-     * @return Relation
+     * @return mixed
      */
     public function fields()
     {
@@ -151,7 +151,7 @@ class Reports extends Model
      * @param string $name
      * @return Model|null
      */
-    public function getField(string $name)
+    public function getField(string $name): ?object
     {
         return $this->fields->where('name','=',$name)->first();
     } 
@@ -263,11 +263,11 @@ class Reports extends Model
      * @param integer|null $userId
      * @return Model|null
      */
-    public function findReport(string $slug, ?int $userId = null)
-    {
-        $query = $this->report($slug,$userId);
-        
-        return $query->first();
+    public function findReport(string $slug, ?int $userId = null): ?object
+    { 
+        $report = $this->report($slug,$userId)->first();
+
+        return ($report == null) ? $this->findById($slug) : $report;
     } 
 
     /**
@@ -279,7 +279,7 @@ class Reports extends Model
      */
     public function hasReport(string $slug, ?int $userId = null): bool
     {
-        return \is_object($this->findReport($slug,$userId));
+        return ($this->findReport($slug,$userId) !== null);
     }
 
     /**
@@ -296,7 +296,7 @@ class Reports extends Model
         $data['user_id'] = $userId;
         $data['slug'] = $slug;
 
-        if (\is_object($model) == true) {
+        if ($model !== null) {
             $model->update($data);
             return $model;
         }

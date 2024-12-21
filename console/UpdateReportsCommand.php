@@ -54,14 +54,16 @@ class UpdateReportsCommand extends ConsoleCommand
         $month = $helper->ask($input, $output, $question);
         $month = (empty($month) == true) ? null : $month;
 
-        $question = new Question("\t Enter Day: ",null);    
-        $day = $helper->ask($input, $output, $question);
-        $day = (empty($day) == true) ? null : $day;
-
         $errors = 0;
         foreach ($reports as $report) {
-            $result = ReportUpdate::updateReport($report,$day,$month,$year);
-            $errors += ($result == false) ? 1 : 0;              
+            $days = \cal_days_in_month(CAL_GREGORIAN, $month, $year);
+                    
+            for($day = 1; $day <= $days; $day++) {
+                $this->writeFieldLn('Day',$day);
+                $result = ReportUpdate::updateReport($report,$day,$month,$year);
+                $errors += ($result == false) ? 1 : 0;   
+            }
+                         
         }
 
         if ($errors == 0) {

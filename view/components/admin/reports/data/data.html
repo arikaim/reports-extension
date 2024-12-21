@@ -1,4 +1,4 @@
-{% set report = createModel('Reports','reports').findById(uuid) %}
+{% set report = createModel('Reports','reports').findReport(uuid) %}
 <div class="ui segment">
     <div class="ui two column grid">
         <div class="ui column">
@@ -9,12 +9,14 @@
                 <div class="pr-2">
                     {{ report.title }}
                 </div>
+                {% if report.user.user_name_or_email is not empty %}
                 <div class="pr-2 font-bold">
                     {{ labels.user }}
                 </div>
                 <div class="pr-2">
-                    {{ report.user.user_name_or_email }}
+                    {{ report.user.user_name_or_email }}                    
                 </div>
+                {% endif %}
             </div> 
         </div>
         <div class="ui column right aligned">

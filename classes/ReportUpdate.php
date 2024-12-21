@@ -42,8 +42,8 @@ class ReportUpdate
         }
 
         $errors = 0;
-    
-        $data = $report->getDataSource()->getReportData('daily',$day,$month,2022);
+        $data = $report->getDataSource()->getReportData('daily',$day,$month,$year);
+        
         foreach ($report->fields()->get() as $field) {         
             $result = Self::updateFieldSummary($field,$data,$day,$month,$year);
             $errors += ($result == true) ? 0 : 1;
@@ -76,7 +76,7 @@ class ReportUpdate
         $month = $month ?? \date('n');
         $year = $year ?? \date('Y');
     
-        // daily summary        
+        // daily summary    
         $summary = Self::calcSummaryValue($data,$field,ReportInterface::CALC_PERIOD_DAILY);  
         $field->saveSummaryValue($summary,ReportInterface::CALC_PERIOD_DAILY,$day,$month,$year);  
     
@@ -114,7 +114,7 @@ class ReportUpdate
     {
         $dataColumn = ($period == ReportInterface::CALC_PERIOD_DAILY) ? $field->getDataClumn() : 'value';
         $values = (empty($dataColumn) == false) ? \array_column($items,$dataColumn) : $items;
-       
+      
         switch ($field->getType()) {
             case ReportInterface::CALC_TYPE_AVG:
                 $summary = \array_sum($values);

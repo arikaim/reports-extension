@@ -30,13 +30,7 @@ class Reports extends Extension
         $this->addApiRoute('DELETE','/api/admin/reports/delete/{uuid}','ReportsControlPanel','delete','session'); 
         $this->addApiRoute('DELETE','/api/admin/reports/delete/data/{uuid}','ReportsControlPanel','deleteData','session'); 
         // Api
-        $this->addApiRoute('PUT','/api/reports/chart','ReportsApi','readChart','session'); 
-
-        // Create db tables
-        $this->createDbTable('ReportsSchema');
-        $this->createDbTable('ReportDataSchema');
-        $this->createDbTable('ReportFieldsSchema');
-        $this->createDbTable('ReportSummarySchema');
+        $this->addApiRoute('PUT','/api/reports/chart','ReportsApi','readChart','session');       
         // Services
         $this->registerService('Reports');
         // Jobs
@@ -45,6 +39,18 @@ class Reports extends Extension
         $this->registerConsoleCommand('UpdateReportsCommand');  
     }   
     
+    /**
+     *  Install db tables
+     * @return void
+     */
+    public function dbInstall(): void
+    {        
+        $this->createDbTable('Reports');
+        $this->createDbTable('ReportData');
+        $this->createDbTable('ReportFields');
+        $this->createDbTable('ReportSummary');
+    }
+
     /**
      * UnInstall extension
      *

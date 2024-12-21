@@ -31,7 +31,7 @@
             {% endif %}
             <div class="flex flex-row items-center self-end px-2">
                 <div>
-                    {{ component('semantic~date.month.name',{ month: month }) }}
+                    {{ month|dateFormat('F') }}                     
                 </div>
                 -
                 <div>

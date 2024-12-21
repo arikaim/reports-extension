@@ -5,6 +5,8 @@
     },
     "labels": {
         "field": "Field",
+        "year": "Year",
+        "month": "Month",
         "data": "Summary"
     }
 }

@@ -39,7 +39,7 @@ class CalculateReportsJob extends Job implements JobInterface
     {
         $reports = Model::Reports('reports')->activeQuery()->get();
         $yesterday = DateTime::subInterval('P1D')->getTimestamp();
-       
+        
         $errors = 0;
         foreach ($reports as $report) {
             $result = ReportUpdate::updateReport(

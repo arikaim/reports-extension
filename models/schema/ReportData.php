@@ -14,7 +14,7 @@ use Arikaim\Core\Db\Schema;
 /**
  * Report data db table
  */
-class ReportDataSchema extends Schema  
+class ReportData extends Schema  
 {    
     /**
      * Table name

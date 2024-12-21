@@ -1,6 +1,8 @@
 {% if field_id is not empty %}
     {% set field = createModel('ReportFields','reports').findById(field_id) %}
 {% endif %}
+{% set items = field.getSummaryQuery('daily',null,month,year) %}
+
 <table class="ui compact stackable selectable borderless basic definition mini table">
     <thead>
         <tr>              
@@ -13,7 +15,7 @@
         </tr>
     </thead>
     <tbody id="share_rows" component="reports::admin.reports.details.data" namespace="reports.summary">      
-        {% for item in field.summary().get() %}
+        {% for item in items.get() %}
         <tr>
             <td>{{ item.date_created|dateFormat }}</td>
             <td>{{ item.value }}</td>
