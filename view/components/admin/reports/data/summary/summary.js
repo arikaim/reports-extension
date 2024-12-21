@@ -3,9 +3,7 @@
 arikaim.component.onLoaded(function() { 
     var month = arikaim.ui.getComponent('month_filter').get('selected');
     var year = arikaim.ui.getComponent('year_filter').get('selected');
-
-    consolelog(month);
-    
+ 
     $('#field_summary_dropdown').dropdown({
         onChange: function(value) {
             arikaim.page.loadContent({
