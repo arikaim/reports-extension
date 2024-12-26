@@ -47,7 +47,7 @@ class ChartReport
     public static function getData(string $periodType, array $summaryData): array
     {
         $result = [];
-        for ($day = 1; $day < 31; $day++) { 
+        for ($day = 1; $day <= 31; $day++) { 
             $item = $summaryData[$day] ?? null;
             $result[] = (\is_array($item) == true) ? (int)$item['value'] ?? 0 : 0;
         }

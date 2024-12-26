@@ -6,7 +6,6 @@
 <table class="ui compact stackable selectable borderless basic definition mini table">
     <thead>
         <tr>              
-            <th class="one wide collapsing left aligned">{{ columns.date }}</th>
             <th class="one wide">{{ columns.value }}</th>     
             <th class="one wide">{{ columns.period }}</th>      
             <th class="one wide">{{ columns.day }}</th>     
@@ -16,8 +15,7 @@
     </thead>
     <tbody id="share_rows" component="reports::admin.reports.details.data" namespace="reports.summary">      
         {% for item in items.get() %}
-        <tr>
-            <td>{{ item.date_created|dateFormat }}</td>
+        <tr>        
             <td>{{ item.value }}</td>
             <td class="one wide">{{ item.period }}</td>   
             <td class="one wide">{{ item.day }}</td>   

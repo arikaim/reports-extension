@@ -4,10 +4,10 @@
         {{ field.title|default(field.name) }}
     </h4>
     <div class="flex flex-row item-center">
-        <div class="px-2">
-            <span class="font-bold px-2">
+        <div class="mx-2">
+            <div class="font-bold px-2">
                 {{ labels.field }}
-            </span>
+            </div>
             {{  component('reports::admin.reports.fields',{ 
                     class: 'selection basic button mini',
                     report_id: report_id, 
@@ -15,10 +15,10 @@
                 }) 
             }}
         </div>  
-        <div class="px-2">
-            <span class="font-bold px-2">
+        <div class="mx-2">
+            <div class="font-bold px-2">
                 {{ labels.year }}
-            </span>
+            </div>
             {{  component('semantic~date.year',{ 
                     from_year: 2022,  
                     class: 'mini',           
@@ -26,19 +26,17 @@
                 }) 
             }}
         </div>  
-        <div class="px-2">
-            <span class="font-bold px-2">
+        <div class="mx-2">
+            <div class="font-bold px-2">
                 {{ labels.month }}
-            </span>
+            </div>
             {{  component('semantic~date.month',{                    
                     class: 'mini',           
                     id: 'month_filter' 
                 }) 
             }}
         </div>    
-    </div>
-  
-   
+    </div> 
     <div id="field_summary_content" class="mt-2">
         {% if field is not empty %}
             {{ component('reports::admin.reports.details.summary.field',{ field_id: field_id }) }}

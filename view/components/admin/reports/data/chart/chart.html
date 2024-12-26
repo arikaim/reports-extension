@@ -1,8 +1,6 @@
 {% if field_id is not empty %}
     {% set field = createModel('ReportFields','reports').findById(field_id) %}
-    {% set report_id = field.report_id %}
-    {% set field_name = field.name %}
-    {% set report = createModel('Reports','reports').findById(report_id) %}
+    {% set report_id = field.report_id %}   
 {% endif %}
 
 <h4>{{ title }}</h4>

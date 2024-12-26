@@ -148,12 +148,16 @@ class Reports extends Model
     /**
      * Get field
      *
-     * @param string $name
+     * @param mixed $name
      * @return Model|null
      */
-    public function getField(string $name): ?object
+    public function getField($name): ?object
     {
-        return $this->fields->where('name','=',$name)->first();
+        return $this
+            ->fields
+            ->where('name','=',$name)
+            ->idQuery($name)
+            ->first();
     } 
 
     /**
