@@ -53,6 +53,7 @@ class Reports extends Model
         'public',
         'description',
         'slug',
+        'handler_class',
         'user_id',
         'category',
         'editable',

@@ -16,6 +16,7 @@ use Arikaim\Core\Db\Traits\Uuid;
 use Arikaim\Core\Db\Traits\ReportData as ReportDataTrait;
 use Arikaim\Core\Db\Traits\Find;
 use Arikaim\Core\Db\Traits\DateCreated;
+use Arikaim\Core\Db\Traits\UserRelation;
 
 /**
  * ReportData class
@@ -25,6 +26,7 @@ class ReportData extends Model implements ReportInterface
     use Uuid,
         ReportDataTrait,
         DateCreated,
+        UserRelation,
         Find;
          
     /**
@@ -41,6 +43,7 @@ class ReportData extends Model implements ReportInterface
      */
     protected $fillable = [
         'uuid',       
+        'user_id',
         'report_id',
         'field_name',
         'value',    
@@ -60,16 +63,23 @@ class ReportData extends Model implements ReportInterface
      * @param integer $reportId
      * @param mixed $value
      * @param string|null $fieldName
+     * @param int|null $userId
      * @return boolean
      */
-    public function addValue(int $reportId, $value, ?string $fieldName = null): bool
+    public function addValue(
+        int $reportId, 
+        $value, 
+        ?string $fieldName = null,
+        ?int $userId = null
+        ): bool
     {
         $model = $this->create([            
             'report_id'  => $reportId,
             'value'      => $value,
-            'field_name' => (empty($fieldName) == true) ? null : $fieldName
+            'field_name' => (empty($fieldName) == true) ? null : $fieldName,
+            'user_id'    => $userId
         ]);
 
-        return \is_object($model);
+        return ($model !== null);
     } 
 }

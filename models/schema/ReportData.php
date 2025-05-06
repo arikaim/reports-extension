@@ -34,6 +34,7 @@ class ReportData extends Schema
         // columns    
         $table->id();
         $table->prototype('uuid'); 
+        $table->userId(true);    
         $table->relation('report_id','reports');
         $table->string('field_name')->nullable(true);
         $table->decimal('value',15,4)->nullable(false);     

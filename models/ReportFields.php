@@ -183,7 +183,7 @@ class ReportFields extends Model implements ReportFieldInterface
             $model = new ReportSummary();       
             $created = $model->create($info);
 
-            return \is_object($created);
+            return ($created != null);
         } 
         
         return (bool)$model->update($info);       
@@ -219,9 +219,7 @@ class ReportFields extends Model implements ReportFieldInterface
      */
     public function hasField(int $reportId, string $type): bool
     {
-        $model = $this->field($reportId,$type)->first();
-
-        return \is_object($model);
+        return ($this->field($reportId,$type)->first() != null);
     }
 
     /**
@@ -252,7 +250,7 @@ class ReportFields extends Model implements ReportFieldInterface
                 'title'       => $title
             ]);
     
-            return \is_object($created);
+            return ($created != null);
         }   
 
         return true;

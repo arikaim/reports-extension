@@ -35,14 +35,15 @@ class Reports extends Schema
         $table->id();
         $table->prototype('uuid');   
         $table->status();    
-        $table->userId();    
+        $table->userId(true);    
         $table->string('title')->nullable(false);
         $table->slug(false);
         $table->integer('editable')->nullable(true); 
         $table->integer('public')->nullable(true); 
         $table->string('category')->nullable(true);   
         $table->string('extension_name')->nullable(true);
-        $table->string('data_source')->nullable(true);     
+        $table->string('data_source')->nullable(true);   
+        $table->string('handler_class')->nullable(true);       
         $table->text('description')->nullable(true);
         $table->text('data_filter')->nullable(true);
         $table->dateCreated();
@@ -62,6 +63,10 @@ class Reports extends Schema
     {       
         if ($this->hasColumn('data_filter') == false) {
             $table->text('data_filter')->nullable(true);
+        }
+
+        if ($this->hasColumn('handler_class') == false) {
+            $table->string('handler_class')->nullable(true);     
         }
     }
 }

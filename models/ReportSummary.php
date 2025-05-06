@@ -15,6 +15,7 @@ use Arikaim\Core\Db\Traits\Uuid;
 use Arikaim\Core\Db\Traits\Find;
 use Arikaim\Core\Db\Traits\DateCreated;
 use Arikaim\Core\Db\Traits\DateUpdated;
+use Arikaim\Core\Db\Traits\UserRelation;
 
 /**
  * ReportSummary class
@@ -24,6 +25,7 @@ class ReportSummary extends Model
     use Uuid,
         DateCreated,
         DateUpdated,
+        UserRelation,
         Find;
          
     /**
@@ -39,7 +41,8 @@ class ReportSummary extends Model
      * @var array
      */
     protected $fillable = [
-        'uuid',       
+        'uuid',  
+        'user_id',    
         'field_id',
         'period',
         'day',
@@ -88,27 +91,15 @@ class ReportSummary extends Model
         return $query;
     }
 
-    /**
-     * Return true if field exist
-     *
-     * @param integer $reportId
-     * @param string $type
-     * @return boolean
-     */
+    /*
+
+
     public function hasField(int $reportId, string $type): bool
     {
-        $model = $this->field($reportId,$type)->first();
-
-        return \is_object($model);
+        return ($this->field($reportId,$type)->first() != null);
     }
 
-    /**
-     * Add or update field
-     *
-     * @param integer $reportId
-     * @param string $type
-     * @return boolean
-     */
+   
     public function saveField(int $reportId, string $type): bool
     {
         $model = $this->field($reportId,$type)->first();
@@ -123,4 +114,6 @@ class ReportSummary extends Model
 
         return true;
     }
+    */
+    
 }

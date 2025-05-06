@@ -34,6 +34,7 @@ class ReportSummary extends Schema
         // columns    
         $table->id();
         $table->prototype('uuid'); 
+        $table->userId(true);    
         $table->relation('field_id','report_fields');       
         $table->string('period')->nullable(false);
         $table->integer('day')->nullable(true);
@@ -43,7 +44,14 @@ class ReportSummary extends Schema
         $table->dateCreated();
         $table->dateUpdated();
         // index 
-        $table->unique(['field_id','period','day','month','year']);           
+        $table->unique([
+            'user_id',
+            'field_id',
+            'period',
+            'day',
+            'month',
+            'year'
+        ]);           
     }
 
     /**

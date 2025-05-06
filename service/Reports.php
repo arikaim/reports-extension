@@ -29,6 +29,25 @@ class Reports extends Service implements ServiceInterface
     }
 
     /**
+     * Register report class
+     * @param string $reportClass
+     * @return bool
+     */
+    public function registerReport(string $reportClass): bool
+    {
+        if (\class_exists($reportClass) == false) {
+            return false;
+        }
+
+        $report = new $reportClass();
+        $model = Model::Reports('reports');  
+
+        $created = $model->saveReport($report->getSlug(),$report->toArray(),null);
+           
+        return ($created != null);
+    }
+
+    /**
      * Create report
      *
      * @param string $slug
@@ -48,15 +67,13 @@ class Reports extends Service implements ServiceInterface
         $model = Model::Reports('reports');  
         $filter = (\is_array($dataSourceFilter) == true) ? \json_encode($dataSourceFilter) : $dataSourceFilter;
         
-        $details = [
+        $created = $model->saveReport($slug,[
             'title'         => $title ?? $slug,
             'data_source'   => $dataSource,
             'data_filter'   => $filter
-        ];
+        ],$userId);
 
-        $created = $model->saveReport($slug,$details,$userId);
-
-        return \is_object($created);
+        return ($created != null);
     }
 
     /**
@@ -65,9 +82,15 @@ class Reports extends Service implements ServiceInterface
      * @param string $reportSlug
      * @param float|int $value
      * @param string|null $fieldName
+     * @param int|null $userId
      * @return boolean
      */
-    public function addValue(string $reportSlug, $value, ?string $fieldName = null): bool
+    public function addValue(
+        string $reportSlug, 
+        $value, 
+        ?string $fieldName = null,
+        ?int $userId = null
+    ): bool
     {
         $report = Model::Reports('reports')->findReport($reportSlug);        
         if ($report == null) {
@@ -75,7 +98,7 @@ class Reports extends Service implements ServiceInterface
         }  
         
         return Model::ReportData('reports')
-            ->addValue($report->id,$value,$fieldName);
+            ->addValue($report->id,$value,$fieldName,$userId);
     }
 
     /**
@@ -105,8 +128,4 @@ class Reports extends Service implements ServiceInterface
         return Model::ReportFields('reports')->saveField($report->id,$type,$dataColumn,$name,$title);           
     }
     
-    public function getValue(string $reportSlug, string $type, string $period)
-    {
-        $model = Model::Reports('reports');     
-    }
 }
